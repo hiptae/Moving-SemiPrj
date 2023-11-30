@@ -39,7 +39,7 @@ public class MailUtils {
 		// 발송자 이메일, 비밀번호
 		Session session = Session.getDefaultInstance(p, new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("rlagmlxo812@gmail.com", "hduu yrlx vbzf eiii");
+				return new PasswordAuthentication("rlagmlxo812@gmail.com", "");
 			}
 		});
         // 메시지 생성
