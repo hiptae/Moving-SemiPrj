@@ -1,0 +1,56 @@
+/* 한글, 영문 폰트 설정 */
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+/* 부트스트랩 헤더 다음 요소 겹침 */
+
+a {
+    text-decoration: none;
+  }
+  /* 슬라이드 이미지 테두리 제거 및 라운드 */
+  .img-thumbnail {
+    border: none; 
+    border-radius: 20px;
+}
+/* dropdown 호버시 메뉴창 */
+@media (min-width: 576px) {
+  .dropdown:hover > .dropdown-menu {
+    display: block;
+    margin-top: 0;
+  }
+}
+
+/* 스크롤바 스타일 */
+::-webkit-scrollbar {
+  width: 7px;          
+}
+::-webkit-scrollbar-thumb {   
+  background-color: #444444;
+}
+::-webkit-scrollbar-track {     
+ background-color: #212529;
+}
+
+/* bxSlider 슬라이더 컨트롤 아이콘 보다 낮게 설정 */
+.bx-wrapper {
+  z-index: 1; 
+}
+/* 슬라이더 이미지 테두리 제거 및 라운드 */
+.bx-wrapper {
+  border: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+#btn-back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+}
+
+.row .cast { height :306px; width : 140px; max-width : 140px; z-index: 100;}
+.row .cast-inner {max-width : 138px;}
+.row .cast-inner img {height : 100%; max-width : 138px; z-index: 50;}
+
+    

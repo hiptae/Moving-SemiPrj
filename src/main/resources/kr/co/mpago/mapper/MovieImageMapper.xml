@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MovieImageMapper">
+<select id="selectMovieImage" resultType="kr.co.mpago.domain.MovieImage">
+	select * from tbl_movieimage where backdroppath = #{backdroppath}
+</select>
+<insert id="insertMovieImage">
+	insert into tbl_movieimage(mno, backdroppath, imagecate)
+	 values (#{mno}, #{backdroppath}, #{imagecate})
+</insert>
+<delete id="deleteMovieImage">
+	delete from tbl_movieImage where backdroppath = #{backdroppath}
+</delete>
+<delete id="deleteAllMovieImage">
+ 	delete from tbl_movieImage where mno = #{mno};
+</delete>
+<update id="updateMovieImage">
+	update tbl_movieImage set mno=#{mno}, backdroppath = #{backdroppath}, imagecate = #{imagecate}
+	where backdroppath = #{backdroppath}
+</update>
+<select id="selectMovieImageList" resultType="kr.co.mpago.domain.MovieImage">
+	select * from tbl_movieimage where mno = #{mno}
+</select>
+<select id="selectMovieImageListByImageCategory" resultType="kr.co.mpago.domain.MovieImage">
+	select * from tbl_movieimage where mno = #{mno} and imagecate = #{imagecate}
+</select>
+<select id="selectMovieGenreImg" resultType="map">
+	select * from tbl_movieimage join tbl_moviegenre using (mno) where imagecate = #{imagecate}
+</select>
+<select id="selectMovieImageTotal" resultType="int">
+	select count(*) from tbl_movieimage where mno = #{mno}
+</select>
+	<select id="selectGenreListByMovieWithImages" resultType="map">
+		select * from tbl_movieimage
+		join tbl_moviegenre using (mno) where gno = #{gno} limit 10;
+	</select>
+</mapper>

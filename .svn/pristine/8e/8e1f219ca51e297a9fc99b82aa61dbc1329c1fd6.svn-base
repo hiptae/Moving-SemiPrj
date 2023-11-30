@@ -1,0 +1,23 @@
+package kr.co.mpago.mapper;
+
+import org.junit.Test;
+
+import kr.co.mpago.domain.Msg;
+import kr.co.mpago.util.DBUtils;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+public class MsgMapperTests {
+	private MsgMapper mapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(MsgMapper.class);
+	
+	@Test
+	public void insert() {
+		Msg msg = new Msg();
+		msg.setTitle("제목");
+		msg.setContent("내용");
+		msg.setFromnick("보낸이");
+		msg.setTonick("받는이");
+		mapper.insert(msg);
+		log.info(msg);
+	}
+}

@@ -1,0 +1,62 @@
+package kr.co.mpago.controller.movie;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.service.MovieService;
+import lombok.extern.log4j.Log4j;
+
+/**
+ * @WebServlet 
+ * 
+ * @author tj
+ *
+ */
+@Log4j
+@WebServlet({"/movie/*"}) 
+// 미완성
+public class MovieController extends HttpServlet {
+	private MovieService movieService = MovieService.getMovieService();
+	
+	/**
+	 * 1. 영화 상세보기 page 
+	 * @return "/movie/{mno}"
+	 * 
+	 * 2. 영화 언어별 보기 page (메인화면 헤더 카테고리에서 한국영화, 외국영화 클릭시)
+	 * @return {"/movie/ko", "/moive/en", ...}
+	 * 
+	 * 3. 영화 카테고리별 보기 (메인화면 가로스크롤에서 더보기 누르면 나오는 화면)
+	 * @return "/movie/genre/{장르번호 or 장르명}"
+	 * 
+	 * "/movie" : 인기 영화 페이지로 또는 전체 영화 페이지로
+	 * "/movie/? : 구현예정 또는 구현필요X
+	 * 				(필수구현-예정) ko(한국영화), en(외국영화) 
+	 * 				(필수구현-예정) {mno}(영화번호, 상세조회)
+	 * 			 	(구현예정 또는 구현필요X) top-rated(평점순), now-playing(현재상영중), upcoming(개봉예정), 등
+	 */
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String uri = req.getRequestURI();
+		String[] arr = uri.substring(1).split("/");
+		log.info("uri ::" + uri);
+		log.info("arr ::" + arr);
+		Object o = null;
+		if(arr.length == 2) {
+			Long mno = Long.valueOf(arr[1]);
+			log.info(mno);
+			o = movieService.getMovie(mno);
+			log.info(o);
+			//  Movie(mno=17, title=다크, runningTime=87, mdate=Wed Sep 28 00:00:00 KST 2005, rated=null, language=en, outline=뉴욕에 ...)
+		}
+		
+		req.setAttribute("movie", o); 
+//		req.getRequestDispatcher("WEB-INF/views/movie/movieDetails.jsp").forward(req, resp);
+	}
+
+
+}

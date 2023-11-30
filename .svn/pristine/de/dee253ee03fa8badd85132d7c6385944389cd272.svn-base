@@ -1,0 +1,10 @@
+package service;
+
+import domain.Member;
+
+public interface MemberService {
+	void register(Member member);
+	Member get();
+	boolean modify();
+	boolean remove();
+}

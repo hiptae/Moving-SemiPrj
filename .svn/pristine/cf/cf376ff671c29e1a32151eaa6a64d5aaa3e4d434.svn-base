@@ -1,0 +1,36 @@
+package kr.co.mpago.service;
+
+import java.util.List;
+
+import kr.co.mpago.domain.Member;
+import kr.co.mpago.mapper.MemberMapper;
+import kr.co.mpago.util.DBUtils;
+import lombok.extern.log4j.Log4j;
+
+public class MemberService {
+	private MemberMapper memberMapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(MemberMapper.class);
+	
+	public void register(Member member) {
+		memberMapper.insert(member);
+	}
+	
+	public List<Member> getList() {
+		return memberMapper.getList();
+	}
+	
+	public Member get(String userid) {
+		return memberMapper.read(userid);
+	}
+	
+	public int idCheck(String userid) {
+		return memberMapper.findId(userid);
+	}
+	
+	public boolean modify(Member member) {
+		return memberMapper.update(member) > 0;
+	}
+	
+	public boolean remove(String userid) {
+		return memberMapper.delete(userid) > 0;
+	}
+}

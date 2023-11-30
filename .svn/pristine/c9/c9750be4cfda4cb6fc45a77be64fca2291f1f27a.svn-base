@@ -1,0 +1,10 @@
+package kr.co.mpago.info;
+
+public class DBInfo {
+	private String className = "org.mariadb.jdbc.Driver";
+	private String url = "jdbc:mariadb://mpago.co.kr:3306/moving";
+	private String username = "kht";
+	private String password = "1234";
+	
+	
+}

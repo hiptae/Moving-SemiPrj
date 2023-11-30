@@ -1,0 +1,62 @@
+package kr.co.mpago.controller.chat;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.websocket.OnClose;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import kr.co.mpago.mapper.ChatMapper;
+import kr.co.mpago.util.DBUtils;
+
+@ServerEndpoint("/customer/chat")
+public class Chat{
+	private static List<Session> sessions = Collections.synchronizedList(new ArrayList<Session>());
+	private ChatMapper chatMapper;
+	private SqlSession sqlSession;
+	@OnOpen
+	public void onOpen(Session session) {
+		sessions.add(session);
+        SqlSessionFactory sqlSessionFactory = DBUtils.sqlSessionFactory();
+        sqlSession = sqlSessionFactory.openSession();
+//        ChatMapper = sqlSession.getMapper(ChatMapper.class);
+		System.out.println("open " + session.getId() + "접속");
+	}
+	@OnMessage
+	public void onMessage(String msg, Session session) {
+		 String id = msg.split(":")[0];  // 사용자 아이디
+	     String message = msg.split(":")[1];  // 메시지
+	     Chat chat = new Chat();
+//	     chat.setSendno(Long.parseLong(id));
+//	     chat.setContent(message);
+//	     chat.setRegdate(new Date());
+//	        // chat.setReceiverno(...) 를 적절한 수신자 아이디로 설정해야 합니다.
+//
+//	     chatMapper.insert(chat);  // 채팅 메시지를 데이터베이스에 저장
+//	     sqlSession.commit();  // 변경 사항을 데이터베이스에 반영
+		 sessions.forEach(s -> {
+			try {
+				s.getBasicRemote().sendText(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		System.out.println("message : " + msg);
+	}
+	@OnClose
+	public void onClose(Session session) {
+		sessions.remove(session);
+		sqlSession.close();  // SqlSession을 닫습니다.
+		System.out.println("close");
+	}
+	
+}

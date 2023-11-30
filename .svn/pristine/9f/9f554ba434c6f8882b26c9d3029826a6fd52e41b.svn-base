@@ -1,0 +1,32 @@
+package kr.co.mpago.controller.movie;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Member;
+import kr.co.mpago.mapper.FavoriteMapper;
+import kr.co.mpago.service.FavoriteService;
+
+@WebServlet("/favorite")
+public class FavoriteController extends HttpServlet{
+	FavoriteService favoriteService = FavoriteService.getFavoriteService();
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Member mem = (Member) req.getSession().getAttribute("member");
+		
+		req.setAttribute("me", favoriteService.getList(mem.getUserno()));
+		super.doGet(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		super.doPost(req, resp);
+	}
+
+}

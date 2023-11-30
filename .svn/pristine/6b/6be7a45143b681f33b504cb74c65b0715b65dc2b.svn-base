@@ -1,0 +1,22 @@
+package kr.co.mpago.mapper;
+
+import java.util.List;
+
+import kr.co.mpago.domain.BoardCategory;
+
+public interface BoardCategoryMapper {
+	// 카테고리 목록 조회
+	List<BoardCategory> getList();
+	
+	// 카테고리 목록 단일 조회
+	BoardCategory get(Long bcate);
+	
+	// 카테고리 등록
+	int insert(BoardCategory boardCategory);
+	
+	// 카테고리 수정 
+	int modify(Long bcate);
+	
+	// 카테고리 삭제
+	int delete(Long bcate);
+}

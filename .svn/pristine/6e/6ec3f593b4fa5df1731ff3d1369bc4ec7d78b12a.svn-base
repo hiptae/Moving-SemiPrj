@@ -1,0 +1,15 @@
+package kr.co.mpago.domain;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class Cast {
+	private Long castno;
+	private String name;
+	private String casting;
+	private String castType;
+	private String profileImage;
+	private String birthDate;
+}

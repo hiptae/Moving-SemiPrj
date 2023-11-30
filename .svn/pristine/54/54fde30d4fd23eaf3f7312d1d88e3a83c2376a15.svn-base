@@ -1,0 +1,75 @@
+package kr.co.mpago.controller.movie;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.service.MovieService;
+
+/**
+ * @WebServlet 
+ * 
+ * @author tj
+ *
+ */
+@WebServlet({"/movie"}) 
+// 미완성
+public class MovieController extends HttpServlet {
+	private MovieService movieService = MovieService.getMovieService();
+	
+	/**
+	 * 영화 삭제(관리자페이지)
+	 */
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		super.doDelete(req, resp);
+	}
+	
+	/**
+	 * 1. 영화 상세보기 page 
+	 * @return "/movie/{mno}"
+	 * 
+	 * 2. 영화 언어별 보기 page (메인화면 헤더 카테고리에서 한국영화, 외국영화 클릭시)
+	 * @return {"/movie/ko", "/moive/en", ...}
+	 * 
+	 * 3. 영화 카테고리별 보기 (메인화면 가로스크롤에서 더보기 누르면 나오는 화면)
+	 * @return "/movie/genre/{장르번호 or 장르명}"
+	 * 
+	 * "/movie" : 인기 영화 페이지로 또는 전체 영화 페이지로
+	 * "/movie/? : 구현예정 또는 구현필요X
+	 * 				(필수구현-예정) ko(한국영화), en(외국영화) 
+	 * 				(필수구현-예정) {mno}(영화번호, 상세조회)
+	 * 			 	(구현예정 또는 구현필요X) top-rated(평점순), now-playing(현재상영중), upcoming(개봉예정), 등
+	 */
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		req.getRequestDispatcher("WEB-INF/views/movie/movieDetails.jsp").forward(req, resp);
+	}
+
+	/**
+	 * 영화 추가(관리자페이지)
+	 * @return "/movie/"
+	 * 
+	 */
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	}
+
+	/**
+	 * 영화 수정(관리자페이지)
+	 */
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		super.doPut(req, resp);
+	}
+	
+	
+
+}

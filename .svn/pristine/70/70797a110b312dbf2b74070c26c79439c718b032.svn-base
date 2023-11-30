@@ -1,0 +1,49 @@
+package kr.co.mpago.service;
+
+import java.io.IOException;
+
+import org.junit.Test;
+
+import kr.co.mpago.util.MovieJsonDataFetcher;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+public class MovieGenreServiceTests {
+	MovieGenreService movieGenreService = MovieGenreService.getMovieGenreService();
+	MovieJsonDataFetcher fetcher = new MovieJsonDataFetcher();
+	
+	//테스트 성공
+		@Test
+		public void testgetMovieApiUrl() {
+			Long mno = 157336L;
+			String apiKey = "60f92fc317ba11184216e66058a386e1";
+			String apiurl = movieGenreService.getMovieApiUrl(mno, apiKey);
+			log.info(apiurl);
+		}
+		
+		//테스트 성공
+		@Test
+		public void testFetchJsonData() throws IOException {
+			Long mno = 16l;
+			String apiKey = "60f92fc317ba11184216e66058a386e1";
+			log.info(apiKey);
+			String apiUrl = movieGenreService.getMovieApiUrl(mno, apiKey);
+			log.info(apiUrl);
+			String jsonMovieData = fetcher.fetchJsonData(apiUrl);
+			log.info(jsonMovieData);
+		}
+		
+		//추가
+		@Test
+		public void testAddMovieImage() throws IOException {
+			for (Long mno = 18l; mno < 3000l; mno++) {
+//			Long mno = 17l;	
+			String apiKey = "60f92fc317ba11184216e66058a386e1";
+			String apiUrl = movieGenreService.getMovieApiUrl(mno, apiKey);
+			log.info(apiUrl);
+			log.info(fetcher.fetchJsonData(apiUrl));
+			movieGenreService.addMovieDataFromJson(mno, apiKey, movieGenreService.getMovieApiUrl(mno, apiKey));
+//			log.info(movieServi/ce.getMovie(mno));
+			}
+		}
+}

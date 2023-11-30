@@ -1,0 +1,11 @@
+package kr.co.mpago.mapper;
+
+import kr.co.mpago.domain.Member;
+
+public interface MemberMapper {
+	void insert(Member member);
+	void read();
+	int delete();
+	int update();
+	
+}

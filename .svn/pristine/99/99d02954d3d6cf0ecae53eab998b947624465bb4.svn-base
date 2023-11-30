@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MovieMapper">
+<insert id="insertMovie">
+	insert into tbl_movie(mno, title, rate, runningTime, mdate, rated, language, outline, status)
+	values (#{mno}, #{title}, #{rate}, #{runningTime}, #{mdate}, #{rated}, #{language}, #{outline}, #{status})
+</insert>
+<select id="selectMovie" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie where mno = #{mno}
+</select>	
+<delete id="deleteMovie" >
+	delete from tbl_movie where mno = #{mno}	
+</delete>
+<update id="updateMovie">
+	update tbl_movie set mno = #{mno}, title = #{title}, rate = #{rate}, runningTime = #{runningTime}, mdate = #{mdate}, rated = #{rated}, language = #{language}, outline = #{outline}, status = #{status}
+	where mno = #{mno}
+</update>
+<select id="selectMovieList" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie order by mdate desc
+</select>
+<select id="selectMovieListByLanguage" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie where language = #{language} order by mdate desc
+</select>
+
+<select id="selectMovieTotal" resultType="int">
+	select count(*) from tbl_movie
+</select>
+<select id="selectMovieTitle" resultType="string">
+	select title from tbl_movie where mno = #{mno}
+</select>
+
+
+<resultMap type="kr.co.mpago.domain.Movie" id="movieMap">
+	<result column="title" property="title"/>
+	<collection property="imgs" resultMap="imgMap"/>
+	<collection property="casts" resultMap="castMap"/>
+</resultMap>
+<resultMap type="kr.co.mpago.domain.MovieImage" id="imgMap">
+	<result column="backdropPath" property="backdroppath"/>
+</resultMap>
+<resultMap type="kr.co.mpago.domain.Cast" id="castMap">
+	<result column="name" property="name"/>
+	<result column="profileImage" property="profileImage"/>
+</resultMap>
+
+<!-- 헤더 검색(영화제목, 배우이름) -->
+<select id="searchMoviCas" resultMap="movieMap">
+select img, title
+from(
+	select i.backdropPath img, title
+	from tbl_movie m
+	join tbl_movieimage i
+	using(mno)
+	union
+	select profileImage, name from tbl_cast
+) a
+where title like '%${search}%';
+</select>
+</mapper>

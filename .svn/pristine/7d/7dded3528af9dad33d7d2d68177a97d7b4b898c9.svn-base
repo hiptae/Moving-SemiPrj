@@ -1,0 +1,10 @@
+package kr.co.mpago.service;
+
+import kr.co.mpago.domain.Member;
+
+public interface MemberService {
+	void register(Member member);
+	Member get();
+	boolean modify();
+	boolean remove();
+}

@@ -1,0 +1,81 @@
+package kr.co.mpago.service;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.co.mpago.domain.MovieGenre;
+import kr.co.mpago.mapper.MovieGenreMapper;
+import kr.co.mpago.util.DBUtils;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j;
+
+// test X
+@Log4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class MovieGenreService {
+	@Getter
+	private static MovieGenreService movieGenreService = new MovieGenreService();
+	private MovieGenreMapper movieGenreMapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(MovieGenreMapper.class);
+	
+	/**
+	 * 장르 추가
+	 * @param genre
+	 */
+	public void addMovieGenre(MovieGenre movieGenre) {
+		movieGenreMapper.insertMovieGenreMapping(movieGenre);
+	}
+	/** 
+	 * 장르 리스트조회
+	 * @return
+	 */
+	public List<Map<String, Object>> getMovieGenreList(Long gno) {
+		return movieGenreMapper.selectMovieListByGenre(gno);
+	}
+	
+	/**
+	 * mno번 영화의 List 조회 
+	 * @param mno
+	 * @return
+	 */
+	public List<MovieGenre> getListByMovie(Long mno) {
+		return movieGenreMapper.selectListByMovie(mno);
+	}
+	
+	/**
+	 * gno번 장르의 List 조회
+	 * @param gno
+	 * @return
+	 */
+	public List<MovieGenre> getListByGenre(Long gno) {
+		return movieGenreMapper.selectListByGenre(gno);
+	}
+	/**
+	 * 장르 선택
+	 * @param gno
+	 * @return
+	 */
+	public List<Map<String, Object>> getMovieGenre(Long mno) {
+		return movieGenreMapper.selectGenreListByMovie(mno);
+	}
+	
+	/**
+	 * 장르 삭제
+	 * @param mgno
+	 * @return
+	 */
+	public boolean removeMovieGenre(Long mgno) {
+		return movieGenreMapper.deleteMovieGenreMapping(mgno) > 0;
+	}
+	
+	/**
+	 * 장르 변경
+	 * @param movieGenre
+	 * @return
+	 */
+	public boolean modifyMovieGenre(MovieGenre movieGenre) {
+		return movieGenreMapper.updateMovieGenreMapping(movieGenre) > 0;
+	}
+	
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MovieCastMapper">
+<resultMap type="kr.co.mpago.domain.MovieCast" id="movieCastResultMap">
+	<result property="mno" column="mno"/>
+	<result property="castno" column="castno"/>
+</resultMap>
+<insert id="insertMovieCastMapping">
+	insert into tbl_moviecast(mcno, mno, castno, casting, casttype)
+	values (#{mcno}, #{mno}, #{castno}, #{casting}, #{casttype})
+</insert>
+<delete id="deleteMovieCastMapping">
+	delete from tbl_moviecast where mcno = #{mcno}
+</delete>
+<update id="updateMovieCastMapping">
+	update tbl_moviecast set mcno = #{mcno}, mno = #{mno}, castno = #{castno}, casting = #{casting}, casttype = #{casttype}
+</update>
+<select id="selectCastForMovie" resultMap="movieCastResultMap">
+	<!-- 구현예정 -->
+</select>
+<select id="selectMovieForCast" resultMap="movieCastResultMap">
+	<!-- 구현예정 -->
+</select>
+</mapper>

@@ -1,0 +1,44 @@
+package kr.co.mpago.service;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import kr.co.mpago.domain.Notice;
+import kr.co.mpago.mapper.CustomerMapper;
+import kr.co.mpago.mapper.NoticeMapper;
+import kr.co.mpago.util.DBUtils;
+
+public class CustomerService {
+
+    private static final CustomerService customerService = new CustomerService();
+
+    private CustomerService() {}
+
+    public static CustomerService getInstance() {
+        return customerService;
+    }
+
+    public void addNotice(String nickname, String title, String content, String isAdmin) {
+        SqlSessionFactory sqlSessionFactory = DBUtils.sqlSessionFactory();
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            CustomerMapper customerMapper = sqlSession.getMapper(CustomerMapper.class);
+            Notice notice = new Notice();
+            notice.setNickname(nickname);
+            notice.setTitle(title);
+            notice.setContent(content);
+            notice.setAdmin(Boolean.parseBoolean(isAdmin));
+            customerMapper.insert(notice);
+            sqlSession.commit();
+        }
+    }
+
+	public List<Notice> getNotices() {
+		 SqlSessionFactory sqlSessionFactory = DBUtils.sqlSessionFactory();
+		    	try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+		    	CustomerMapper customerMapper = sqlSession.getMapper(CustomerMapper.class);
+		        return customerMapper.getList();
+		    }
+		}
+}

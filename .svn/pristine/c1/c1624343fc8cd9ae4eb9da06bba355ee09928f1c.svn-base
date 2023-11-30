@@ -1,0 +1,17 @@
+package kr.co.mpago.domain;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class Movie {
+	private Long mno;
+	private String title;
+	private Long rate;
+	private String runningTime;
+	private String rated;
+	private String language;
+	private String outline;
+	private String status;
+}

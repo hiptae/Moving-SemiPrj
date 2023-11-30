@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MsgMapper">
+	<!-- 쪽지발송 -->
+	<insert id="insert">
+	insert into tbl_msg(title, content, fromnick, tonick) values(#{title},#{content},#{fromnick},#{tonick})
+	</insert>
+	<!-- 받은편지함 -->
+	<select id="getReciList" resultType="kr.co.mpago.domain.Msg">
+	select title, fromnick, regdate 
+	from tbl_msg 
+	where tonick = #{tonick} 
+	and msgno > 0
+	order by msgno desc
+	</select>
+	
+	<!-- 보낸편지함 -->
+	<select id="getSendiList" resultType="kr.co.mpago.domain.Msg">
+	select title, tonick, regdate 
+	from tbl_msg 
+	where tonick = #{fromnick} 
+	and msgno > 0
+	order by msgno desc
+	</select>
+	
+	<!-- 단일조회 -->
+	<select id="read" resultType="kr.co.mpago.domain.Msg">
+	select title, content, regdate, fromnick, tonick from tbl_msg where msgno = #{msgno}
+	</select>
+
+	<!-- 삭제 -->
+	<delete id="delete">
+	delete from tbl_msg where msgno in
+		<foreach collection="list" item="msgnos" open="(" separator="," close=")">
+		#{msgnos}
+		</foreach>
+	</delete>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

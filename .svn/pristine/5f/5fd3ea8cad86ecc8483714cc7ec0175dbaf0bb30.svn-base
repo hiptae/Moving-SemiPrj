@@ -1,0 +1,33 @@
+package kr.co.mpago.service;
+
+import kr.co.mpago.domain.Member;
+import kr.co.mpago.mapper.MemberMapper;
+import kr.co.mpago.util.DBUtils;
+
+public class MemberServiceImpl implements MemberService{
+	private MemberMapper memberMapper = DBUtils.sqlSessionFactory().openSession().getMapper(MemberMapper.class);
+	
+	@Override
+	public void register(Member member) {
+		memberMapper.insert(member);
+	}
+
+	@Override
+	public Member get() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean modify() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

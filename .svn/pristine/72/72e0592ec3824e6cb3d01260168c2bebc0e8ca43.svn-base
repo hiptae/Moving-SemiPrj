@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MovieCastMapper">
+	<insert id="insertMovieCastMapping">
+		insert into tbl_moviecast(mno, castno, casting, castType, `order`) values (#{mno}, #{castno}, #{casting}, #{castType}, #{order})
+	</insert>
+	<delete id="deleteMovieCastMapping">
+		delete from tbl_moviecast where mcno = #{mcno}
+	</delete>
+<!-- 	관리자 페이지 영화선택 삭제시 참조테이블 삭제 
+	<delete id="deleteByMovieNos">
+		delete from tbl_moviecast where mno in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</delete> -->
+	<update id="updateMovieCastMapping">
+		update tbl_moviecast set mcno = #{mcno}, mno = #{mno}, castno = #{castno}, casting = #{casting}, casttype = #{casttype}, `order` = #{order}
+	</update>
+	<select id="selectCastListByMovie" resultType="map">
+		select * from tbl_cast
+		join tbl_moviecast using (castno) where mno = #{mno}
+	</select>
+	<select id="selectListByMovie" resultType="kr.co.mpago.domain.MovieCast">
+		select * from tbl_moviecast where mno = #{mno}
+	</select>
+	<select id="selectMovieListByCast" resultType="map">
+		select * from tbl_movie
+		join tbl_moviecast using (mno) where castno = #{castno}
+	</select>
+	<select id="selectListByCast" resultType="kr.co.mpago.domain.MovieCast">
+		select * from tbl_moviecast where castno = #{castno}
+	</select>
+</mapper>

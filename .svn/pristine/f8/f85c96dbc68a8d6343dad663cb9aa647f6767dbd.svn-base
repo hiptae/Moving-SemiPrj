@@ -1,0 +1,36 @@
+package kr.co.mpago.controller.msg;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.service.MsgService;
+
+
+@WebServlet("/message")
+public class Message extends HttpServlet{
+	private MsgService msgService = new MsgService();
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.getRequestDispatcher("WEB-INF/views/message/msgMain.jsp").forward(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String[] msgs = req.getParameterValues("msgno");
+		List<Long> msgnos = new ArrayList<Long>();
+		for(String no : msgs) {
+			msgnos.add(Long.parseLong(no));
+		}
+		msgService.remove(msgnos);
+		resp.sendRedirect("");
+	}
+	
+}

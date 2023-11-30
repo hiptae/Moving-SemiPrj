@@ -1,0 +1,92 @@
+package kr.co.mpago.controller.member;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+
+import kr.co.mpago.domain.Member;
+import kr.co.mpago.domain.Rate;
+import kr.co.mpago.service.MemberService;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@WebServlet("/member/profileModify")
+public class profileModifyController extends HttpServlet{
+	MemberService memberService = MemberService.getInstance();
+	private Gson gson = new Gson();
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Member member = (Member) req.getSession().getAttribute("member"); 
+		
+		req.setAttribute("myMember", memberService.findBy(((Member)member).getUserid()));
+		req.getRequestDispatcher("/WEB-INF/views/member/profileModify.jsp").forward(req, resp);
+	}
+
+	
+	  @Override
+	  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//	        Member member = new Gson().fromJson(req.getReader(), Member.class);
+//	        boolean result = memberService.modify(member);
+//		  System.out.println("여기 잘작동하나?"); 
+//		  
+//			  String userno = req.getParameter("userNo");
+//			  String nickname = req.getParameter("nickName");
+//			  log.info("userNo:::::{}",userno); log.info("uickName:::::{}",nickname);
+//			  //Member member = new Member(); 
+//			  //member.setUserno(userno);
+//			  //member.setUserno(userno); member.setUserno(Long.parseLong(userno));
+//			  member.setUserno(Long.parseLong(userno));
+//			  member.setNickname(nickname);
+//			  
+//			  log.info("member::::::::{}",member);
+//			  
+//			  int nickNameUpdate = memberService.modifyNickname(member);
+		  
+		  String str = new BufferedReader(new InputStreamReader(req.getInputStream())).lines().collect(Collectors.joining());
+			Member member = gson.fromJson(str, Member.class);
+
+			boolean updateMember = memberService.modify(member);
+			
+			if (updateMember == true) {
+				resp.setStatus(200); // 200 : 성공
+				resp.getWriter().print(member.getNickname());
+			} else {
+				resp.setStatus(500); // 500 : 오류메세지
+			}
+		}
+
+	@Override
+	    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	        Member member = new Gson().fromJson(req.getReader(), Member.class);
+	        boolean result = memberService.modify(member);
+			   
+			  	String userno = req.getParameter("userNo");
+			    String nickname = req.getParameter("nickName");
+			    
+			    member.setUserno(Long.parseLong(userno));
+			    member.setNickname(nickname);
+			    
+			    int nickNameUpdate = memberService.modifyNickname(member);
+	        
+	        
+	        resp.setContentType("application/json");
+	        resp.setCharacterEncoding("UTF-8");
+	        resp.getWriter().write(new Gson().toJson(result));
+	    }
+	
+
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MovieImageMapper">
+<select id="selectMovieImage" resultType="kr.co.mpago.domain.MovieImage">
+	select * from tbl_movieimage
+</select>
+<insert id="insertMovieImage">
+</insert>
+<delete id="deleteMovieImage">
+</delete>
+<update id="updateMovieImage">
+</update>
+<select id="selectMovieImageList" resultType="kr.co.mpago.domain.MovieImage">
+</select>
+<select id="selectMovieImageListByImageCategory" resultType="kr.co.mpago.domain.MovieImage">
+</select>
+<select id="selectMovieImageTotal" resultType="int">
+</select>
+</mapper>

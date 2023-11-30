@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MemberMapper">
+	<insert id="insert">
+	insert into tbl_user(userid, nickname, username, password, email) 
+	values(#{userid}, #{nickname}, #{username}, #{password}, #{email})
+	</insert>
+	
+	<select id="read" resultType="kr.co.mpago.domain.Member">
+	select userno, userid, nickname, password, regdate from tbl_user where userid = #{userid}
+	</select>
+	
+	<select id="getList" resultType="kr.co.mpago.domain.Member">
+	select userid, nickname, username, regdate from tbl_user
+	</select>
+	
+	<update id="update">
+	update tbl_user set	nickname = #{nickname}, password = #{password} where userno = #{userno}
+	</update>
+	
+	<delete id="delete">
+	delete from tbl_user where userid = #{userid}
+	</delete>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

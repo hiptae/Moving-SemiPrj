@@ -1,0 +1,117 @@
+package kr.co.mpago.controller.movie;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+
+import kr.co.mpago.domain.Rate;
+import kr.co.mpago.service.RateService;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@WebServlet("/rate/*")
+public class RateController extends HttpServlet {
+	private RateService rateService = new RateService();
+	private Gson gson = new Gson();
+	
+	// 댓글 삭제
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String uri = req.getRequestURI();
+		String[] arr = uri.substring(1).split("/");
+	
+		if(arr.length == 2) { // 단일삭제   
+			Long rno = Long.valueOf(arr[1]);
+			log.info("단일삭제, rno : " + rno);		
+			
+			if ( rateService.delete(rno) > 0) {	
+				resp.setStatus(200);
+				resp.getWriter().print("success");
+			} else {
+				resp.setStatus(500);
+			}
+			
+		}
+		
+	}
+
+	// 댓글 조회(목록)
+	@Override
+	//http://localhost:8080/rate/list/{mno}
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	    String uri = req.getRequestURI();
+	    String[] arr = uri.substring(1).split("/");
+	    Object o = null;
+	    
+		// 단일조회
+		if(arr.length == 2) {
+			Long rno = Long.valueOf(arr[1]);
+			log.info("조회, rno : " + rno);
+			o = rateService.getUser(rno);
+		}
+	    
+		// 목록조회
+	    if (arr.length >= 3) {
+	        Long mno = Long.valueOf(arr[2]);
+	        if (arr[1].equals("list")) {
+	            int amout = 5;
+	            Long lastRno = Long.MAX_VALUE;
+	            if (arr.length > 3) {
+	                try {
+	                    lastRno = Long.valueOf(arr[3]);
+	                } catch (NumberFormatException e) {
+	                   
+	                }
+	            }
+	            
+	            log.info("목록조회, mno: " + mno);
+	            o = rateService.getList(mno, amout, lastRno);
+	        } else if (arr[1].equals("cnt")) {
+	            System.out.println("갯수 조회, mno: " + mno);
+	            o = rateService.getCount(mno);
+	        } 
+	    }
+	    
+	    resp.setContentType("application/json; charset=utf-8");
+	    resp.getWriter().print(gson.toJson(o));
+	}
+
+	// 댓글 등록
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		String str = new BufferedReader(new InputStreamReader(req.getInputStream())).lines().collect(Collectors.joining());
+		Rate rate = gson.fromJson(str, Rate.class);
+		
+		if ( rateService.register(rate) > 0) {
+			resp.setStatus(200); // 200 : 성공
+			resp.getWriter().print(rate.getRno());
+		} else {
+			resp.setStatus(500); // 500 : 오류메세지 
+		}
+	}
+
+	// 댓글 수정
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		String str = new BufferedReader(new InputStreamReader(req.getInputStream())).lines().collect(Collectors.joining());
+		Rate rate = gson.fromJson(str, Rate.class);
+		
+		if( rateService.modify(rate) > 0) {
+			resp.setStatus(200);
+			resp.getWriter().print("success");
+		} else {
+			resp.setStatus(500);
+		}
+	}	
+}

@@ -1,0 +1,26 @@
+package kr.co.mpago.controller.member;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.service.MemberService;
+
+@WebServlet("/member/idcheck")
+public class IdCheck extends HttpServlet{
+	private MemberService memberservice = new MemberService();
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String id = req.getParameter("userid");
+		System.out.println(id);
+		int cnt = memberservice.idCheck(id);
+        resp.setContentType("application/json");
+		resp.getWriter().write("{\"available\":" + cnt + "}");
+	}
+
+}

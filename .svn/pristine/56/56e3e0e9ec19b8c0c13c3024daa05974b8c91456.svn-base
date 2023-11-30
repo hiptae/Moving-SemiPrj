@@ -1,0 +1,25 @@
+package kr.co.mpago.controller.filter;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+
+import kr.co.mpago.service.BoardService;
+
+@WebFilter("/*")
+public class BoardCategoryFilter implements Filter{
+	private BoardService boardService = new BoardService();
+
+	@Override
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
+			throws IOException, ServletException {
+		req.setAttribute("categories", boardService.categoryList());
+		chain.doFilter(req, resp);
+	}
+
+}

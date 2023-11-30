@@ -1,0 +1,12 @@
+package kr.co.mpago.domain;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class BoardCategory {
+
+	private Long bcate;
+	private String boardcategory;
+}

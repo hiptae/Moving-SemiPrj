@@ -1,0 +1,110 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<header>
+    <!-- ======== nav ======== -->
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <div class="container-fluid mx-4">
+        <a class="navbar-brand" href="test.html">
+          <img src="img/movinlogo.png" alt="logo" width="150" height="65">
+        </a>
+        <div class="collapse navbar-collapse" id="mynavbar">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link fs-5" href="javascript:void(0)">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link fs-5 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">한국영화</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">공포</a></li>
+                <li><a class="dropdown-item" href="#">로맨스</a></li>
+                <li><a class="dropdown-item" href="#">코미디</a></li>
+                <li><a class="dropdown-item" href="#">판타지</a></li>
+                <li><a class="dropdown-item" href="#">애니메이션</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link fs-5 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">외국영화</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">가족</a></li>
+                <li><a class="dropdown-item" href="#">액션</a></li>
+                <li><a class="dropdown-item" href="#">로맨스</a></li>
+                <li><a class="dropdown-item" href="#">스릴러</a></li>
+                <li><a class="dropdown-item" href="#">다큐멘터리</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link fs-5 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">게시판</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">리뷰</a></li>
+                <li><a class="dropdown-item" href="#">자유게시판</a></li>
+                <li><a class="dropdown-item" href="#">영화요청</a></li>
+              </ul>
+            </li>
+          </ul>
+          <!-- icon  -->
+          <!-- 검색 아이콘 -->
+          <div class="col-auto">
+            <a class="icon text-white text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#myModal">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="30" fill="White" class="bi bi-search mx-1 "
+                viewBox="0 0 16 16">
+                <path
+                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+              </svg>
+            </a>
+
+            <!-- 검색 아이콘 클릭시 모달 -->
+            <!-- The Modal -->
+            <div class="modal fade" id="myModal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">
+                      <!-- justify-content-center 했는데 가운데로 안 가요 -->
+                      <form class="d-flex justify-content-center">
+                        <input class="form-control me-2 my-3" type="text" style="width: 350px;" placeholder="인물, 제목, 장르 등을 검색하세요.">
+                        <button class="btn" type="button" style="white-space: nowrap;">검색</button>
+                      </form>
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <!-- <div class="modal-body">
+                    Modal body..
+                  </div> -->
+                </div>
+              </div>
+            </div>
+
+            <!-- 알림 아이콘 -->
+            <a class="icon text-white text-decoration-none" href="#">
+              <svg xmlns="http://www.w3.org/2000/svg" href="#" width="25" height="40" fill="White"
+              class="bi bi-bell mx-2" viewBox="0 0 16 16">
+              <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
+            </svg>
+          </a>
+            
+          <!-- 알람아이콘 클릭시 toast창 구현중  -->
+          <!-- <div class="toast" id="myToast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img src="img/profile.png" class="rounded me-2" alt="...">
+            <strong class="me-auto">nickname</strong>
+            <small class="text-muted">11 mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            Hello, world! This is a toast message.
+          </div>
+        </div> -->
+          
+            <a class="btn fs-6" href="#">로그인</a>
+            <!-- profile ( 로그인 했을 때 보여짐) -->
+            <!-- <a class="navbar-brand" href="#">
+              <img src="img/profile.png" alt="" width="30" height="30" class="rounded-pill">
+              nickname
+            </a> -->
+          </div>
+        </div>
+      </div>
+    </nav>
+    </div>
+    </div>
+  </header>

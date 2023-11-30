@@ -1,0 +1,70 @@
+package kr.co.mpago.util;
+
+
+import javax.sql.DataSource;
+
+import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+import kr.co.mpago.mapper.MemberMapper;
+
+public class DBUtils {
+	private static TransactionFactory transactionFactory() {
+		return new JdbcTransactionFactory();
+	}
+    	
+    public static DataSource dataSource() {
+    	HikariConfig config = new HikariConfig();
+    	config.setDriverClassName("org.mariadb.jdbc.Driver");
+    	config.setJdbcUrl("jdbc:mariadb://mpago.co.kr:3306/moving");
+    	config.setUsername("kht");
+    	config.setPassword("1234");
+        HikariDataSource dataSource = new HikariDataSource(config);
+        return dataSource;
+    }
+    
+    public static SqlSessionFactory sqlSessionFactory() {
+        Environment environment = new Environment("moving", transactionFactory(), dataSource());
+        Configuration configuration = new Configuration(environment);
+        configuration.addMapper(MemberMapper.class);  // Replace YourMapper with the actual mapper interface
+
+        return new SqlSessionFactoryBuilder().build(configuration);
+    }
+//
+//
+//	
+//	public static void setPstmtParameter(PreparedStatement pstmt, int idx, Object o) throws SQLException {
+//		if(o == null) {
+//			pstmt.setObject(idx, null);
+//			return;
+//		}
+//		
+//		switch (o.getClass().getSimpleName()) {
+//		case "String":
+//			pstmt.setString(idx, (String)o);
+//			break;
+//		case "int": case "Integer":
+//			pstmt.setInt(idx, (Integer)o);
+//			break;
+//		case "long": case "Long":
+//			pstmt.setLong(idx, (Long)o);
+//			break;
+//		case "double": case "Double":
+//			pstmt.setDouble(idx, (Double)o);
+//			break;
+//		case "date":
+//			pstmt.setDate(idx, (Date)o);
+//			break;
+//
+//		default:
+//			break;
+//		}
+//	}
+}

@@ -1,0 +1,66 @@
+package kr.co.mpago.controller.member;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+
+import kr.co.mpago.domain.Member;
+import kr.co.mpago.service.MemberService;
+import kr.co.mpago.util.WebUtils;
+
+
+@WebServlet("/member/pwModify")
+public class pwModifyController extends HttpServlet{
+	MemberService memberService = MemberService.getInstance();
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Member member = (Member)req.getSession().getAttribute("member");
+		
+		req.setAttribute("myMember", memberService.findBy(((Member)member).getUserid()));
+		req.getRequestDispatcher("/WEB-INF/views/member/profileModify.jsp").forward(req, resp);
+	}
+
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+//		  String oldpassword = req.getParameter("oldpassword"); 
+//		  String password = req.getParameter("password"); 
+//		  String passwordchk = req.getParameter("passwordchk"); 
+//		  
+//		  Object member = req.getSession().getAttribute("member"); if (member == null)
+//		  { resp.sendRedirect("/"); return; }
+//		  
+//		  // 비밀번호변경 (4자리이상) 
+//		  Member findMember = memberService.get(((Member)member).getUserno()); // 현재 로그인중인 id 
+//		  if (!oldpassword.equals(findMember.getPassword())) { WebUtils.alert(resp,
+//		  "기존 비밀번호와 다릅니다.", true); } else if (!password.equals(passwordchk)) {
+//		  WebUtils.alert(resp, "똑같이 입력해주세요", true); } else if (password.length() < 4) {
+//		  WebUtils.alert(resp, "비밀번호는 4자리 이상이어야 합니다.", true); } else {
+//		  findMember.setPassword(password); // 새로운 비밀번호로 업데이트
+//		  memberService.modifyPassword(findMember); // 업데이트 메서드 호출
+//		  
+//		  PrintWriter pw = resp.getWriter(); 
+//		  pw.write("<script>alert('비밀번호 변경 성공'); location.href = '/member/myPage';</script>");
+//		 
+	
+	}
+	
+	  @Override
+	    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	        Member member = new Gson().fromJson(req.getReader(), Member.class);
+	        boolean result = memberService.modify(member);
+	        
+	        resp.setContentType("application/json");
+	        resp.setCharacterEncoding("UTF-8");
+	        resp.getWriter().write(new Gson().toJson(result));
+	    }
+}

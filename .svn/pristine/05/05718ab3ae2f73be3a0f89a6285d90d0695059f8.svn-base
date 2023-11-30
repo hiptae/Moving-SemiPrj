@@ -1,0 +1,81 @@
+package kr.co.mpago.service;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.co.mpago.domain.MovieCast;
+import kr.co.mpago.mapper.MovieCastMapper;
+import kr.co.mpago.util.DBUtils;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j;
+
+// test X
+@Log4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class MovieCastService {
+	@Getter
+	private static MovieCastService movieCastService = new MovieCastService();
+	private MovieCastMapper movieCastMapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(MovieCastMapper.class);
+	
+	/**
+	 * 장르 추가
+	 * @param genre
+	 */
+	public void addMovieCast(MovieCast movieCast) {
+		movieCastMapper.insertMovieCastMapping(movieCast);
+	}
+	/** 
+	 * 장르 리스트조회
+	 * @return
+	 */
+	public List<Map<String, Object>> getMovieCastList(Long castno) {
+		return movieCastMapper.selectMovieListByCast(castno);
+	}
+	
+	/**
+	 * mno번 영화의 List 조회 
+	 * @param mno
+	 * @return
+	 */
+	public List<MovieCast> getListByMovie(Long mno) {
+		return movieCastMapper.selectListByMovie(mno);
+	}
+	
+	/**
+	 * castno번 장르의 List 조회
+	 * @param castno
+	 * @return
+	 */
+	public List<MovieCast> getListByCast(Long castno) {
+		return movieCastMapper.selectListByCast(castno);
+	}
+	/**
+	 * 장르 선택
+	 * @param castno
+	 * @return
+	 */
+	public List<Map<String, Object>> getMovieCast(Long mno) {
+		return movieCastMapper.selectCastListByMovie(mno);
+	}
+	
+	/**
+	 * 장르 삭제
+	 * @param mcno
+	 * @return
+	 */
+	public boolean removeMovieCast(Long mcno) {
+		return movieCastMapper.deleteMovieCastMapping(mcno) > 0;
+	}
+	
+	/**
+	 * 장르 변경
+	 * @param movieCast
+	 * @return
+	 */
+	public boolean modifyMovieCast(MovieCast movieCast) {
+		return movieCastMapper.updateMovieCastMapping(movieCast) > 0;
+	}
+	
+}

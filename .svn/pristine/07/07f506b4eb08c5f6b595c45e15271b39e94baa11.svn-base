@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MovieMapper">
+<insert id="insertMovie">
+	insert into tbl_movie(mno, title, runningTime, mdate, rated, language, outline, status)
+	values (#{mno}, #{title}, #{runningTime}, #{mdate}, #{rated}, #{language}, #{outline}, #{status})
+</insert>
+<select id="selectMovie" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie where mno = #{mno}
+</select>	
+<delete id="deleteMovie" >
+	delete from tbl_movie where mno = #{mno}	
+</delete>
+<!-- 영화목록삭제  -->
+<delete id="deleteAll">
+    delete from tbl_movie where mno in
+	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+     #{item}
+	</foreach>
+</delete>
+<update id="updateMovie">
+	update tbl_movie set mno = #{mno}, title = #{title}, runningTime = #{runningTime}, mdate = #{mdate}, rated = #{rated}, language = #{language}, outline = #{outline}, status = #{status}
+	where mno = #{mno}
+</update>
+<select id="selectMovieList" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie order by mdate desc
+</select>
+<select id="selectMovieListByLanguage" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie where language = #{language} order by mdate desc
+</select>
+<select id="selectTenMovieListByLanguage" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie where language = #{language} order by mdate desc limit 10
+</select>
+
+<select id="selectMovieTotal" resultType="int">
+	select count(*) from tbl_movie
+</select>
+<select id="selectMovieTitle" resultType="string">
+	select title from tbl_movie where mno = #{mno}
+</select>
+
+
+
+
+<!-- 영화검색 개수 제한 -->
+<select id="searchMoviMain" resultType="kr.co.mpago.domain.Movie">
+select mno, backdropPath img, title
+from tbl_movie
+join tbl_movieimage
+using(mno)
+where imagecate = 'backdrop' and title like concat('%',#{search},'%')
+limit 10
+</select>
+
+<!-- 더보기 영화 리스트 -->
+<select id="searchMoviList" resultType="kr.co.mpago.domain.Movie">
+select backdropPath img, title
+from tbl_movie
+join tbl_movieimage
+using(mno)
+where imagecate = 'backdrop' and title like concat('%',#{search},'%')
+</select>
+
+<!-- 관리자페이지 목록 처리 -->
+<select id="getListWithPaging" parameterType="kr.co.mpago.domain.Criteria" resultType="kr.co.mpago.domain.Movie">
+<![CDATA[
+select mno, title, runningTime, mdate, language, status
+FROM (
+      select *, row_number() over (order by mdate desc) as rnum
+      from tbl_movie
+       where title LIKE CONCAT('%', #{keyword}, '%')
+    ) as tbl
+where rnum between #{offset} + 1 and #{offset} + #{amount}
+]]>   
+</select>
+<!-- 관리자페이지 검색에 따른 영화 수 조회 -->
+<select id="getTotalWithKeyword" resultType="int">
+select count(*) from tbl_movie where title LIKE CONCAT('%', #{keyword}, '%')
+</select>
+<resultMap id="movieGenreResultMap" type="kr.co.mpago.domain.IndexMovie">
+    <result property="gno" column="gno"/>
+    <result property="mno" column="mno"/>
+    <result property="backdroppath" column="path"/>
+</resultMap>
+
+<select id="selectIndexMovieList" resultMap="movieGenreResultMap">
+select * from (select gno, mno, (select backdropPath from tbl_movieimage where mno = tm.mno and imagecate = 'poster') path from tbl_moviegenre tm where gno = 28 limit 10) a
+union all
+select * from (select gno, mno, (select backdropPath from tbl_movieimage where mno = tm.mno and imagecate = 'poster') from tbl_moviegenre tm where gno = 10749 limit 10) a
+union all
+select * from (select gno, mno, (select backdropPath from tbl_movieimage where mno = tm.mno and imagecate = 'poster') from tbl_moviegenre tm where gno = 35 limit 10) a
+union all
+select * from (select gno, mno, (select backdropPath from tbl_movieimage where mno = tm.mno and imagecate = 'poster') from tbl_moviegenre tm where gno = 27 limit 10) a
+union all
+select * from (select 'ko', mno, (select backdropPath from tbl_movieimage where mno = tm.mno and imagecate = 'poster') from tbl_movie tm where language = 'ko' limit 10) a
+union all
+select * from (select 'en', mno, (select backdropPath from tbl_movieimage where mno = tm.mno and imagecate = 'poster') from tbl_movie tm where language = 'en' limit 10) a
+</select>
+</mapper>

@@ -1,0 +1,117 @@
+package kr.co.mpago.mapper;
+
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.junit.Test;
+
+import kr.co.mpago.domain.Movie;
+import kr.co.mpago.util.DBUtils;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+
+
+@Log4j
+public class MovieMapperTests {
+	
+	private SqlSessionFactory factory = DBUtils.sqlSessionFactory();
+	private MovieMapper movieMapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(MovieMapper.class);	
+
+	// Mapper 연결 Test (성공)
+	@Test
+	public void testMapper() {
+		System.out.println(movieMapper);
+		System.out.println(factory.getConfiguration());
+	}
+	
+	// insert (성공)
+	@Test
+	public void testInsert() {
+		Movie movie = new Movie();
+		
+//		movie.setMno(11L);
+		movie.setTitle("Mapper Test Title");
+		movie.setRate(4.5);
+		movie.setRunningTime(52);
+		movie.setFormattedMdate("2023/10/19");
+		movie.setRated("ALL");
+		movie.setLanguage("ko");
+		movie.setOutline("개요");
+		movie.setStatus("개봉 전");
+		
+		log.info(movie);
+		movieMapper.insert(movie);
+		log.info(movie);
+	}
+
+//	// mno 값 확인 + insert (성공)
+//	@Test
+//	public void testinsertSelectKey() {
+//		Movie movie = new Movie();
+//		
+//		movie.setTitle("Mapper Test Title");
+//		movie.setRate(4.5);
+//		movie.setRunningTime(52);
+//		movie.setFormattedMdate("2023/10/19");
+//		movie.setRated("ALL");
+//		movie.setLanguage("ko");
+//		movie.setOutline("개요");
+//		movie.setStatus("개봉 전");
+//		
+//		log.info(movie);
+//		movieMapper.insertSelectKey(movie);
+//		log.info(movie);
+//	}
+
+	// 단일조회 test (성공)
+	@Test
+	public void testSelect() {
+		movieMapper.select(11L);
+		log.info(movieMapper.select(11L));
+	}
+	
+	// 단일삭제 test (성공)
+	@Test
+	public void testDelete() {
+		testSelect();
+		movieMapper.delete(6L);
+		log.info(movieMapper.delete(6L));
+		testSelect();
+	}
+	
+	// 단일변경 test (성공)
+	@Test
+	public void testUpdate() {
+		Movie movie = movieMapper.select(11L);
+		movie.setTitle("테스트 제목 또변경");
+		movie.setFormattedMdate("2023/10/16");
+		
+		movieMapper.update(movie);
+		log.info(movie);
+		
+		movie = movieMapper.select(3L);
+		log.info(movie);
+	}
+	
+	// 전체조회 (성공)
+	@Test
+	public void testselectList() {
+		movieMapper.selectList().forEach(movie -> log.info(movie));
+	}
+	
+	// 언어 입력하면 그 언어의 List가 나옴 test(성공)
+	@Test
+	public void testselectListByLanguage() {
+		movieMapper.selectListByLanguage("ko").forEach(movie -> log.info(movie));
+	}
+	
+	// 갯수 조회 (성공)
+	@Test
+	public void testselectTotal() {
+		int t = movieMapper.selectTotal();
+		log.info(t);
+	}
+	
+	// 만들어야 할 것 : 카테고리별 조회
+	// 언어, 장르, 연도, 별점, 런타임 등
+	
+}

@@ -1,0 +1,72 @@
+package kr.co.mpago.mapper;
+
+
+import java.util.List;
+
+import org.apache.ibatis.javassist.bytecode.Mnemonic;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.junit.Test;
+
+import kr.co.mpago.domain.Cast;
+import kr.co.mpago.domain.Movie;
+import kr.co.mpago.domain.MovieCast;
+import kr.co.mpago.util.DBUtils;
+import lombok.extern.log4j.Log4j;
+
+
+@Log4j
+public class MovieCastMapperTests {
+	
+	private SqlSessionFactory factory = DBUtils.sqlSessionFactory();
+	private MovieCastMapper movieCastMapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(MovieCastMapper.class);	
+	private MovieMapper movieMapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(MovieMapper.class);
+	
+	// Mapper 연결 Test (성공)
+	@Test
+	public void testMapper() {
+		log.info(movieCastMapper);
+		log.info(factory.getConfiguration());
+	}
+	
+	// Mapping insert (성공)
+	@Test
+	public void testInsert() {
+		MovieCast movieCast = MovieCast.builder()
+				.mno(1L).castno(6L).casting("test배역명").castType("test조연")
+				.build();
+		
+		log.info(movieCast);
+		movieCastMapper.insertMovieCastMapping(movieCast);
+		log.info(movieCast);
+	}
+	
+	// Mapping삭제 test (성공)
+	@Test
+	public void testDelete() {
+		movieCastMapper.deleteMovieCastMapping(22L);
+	}
+	
+	// 단일변경 없음	
+
+	
+	// 특정 배우의 영화 전체조회
+	@Test
+	public void testSelectMovieForCastList() {
+		List<MovieCast> movieCasts = movieCastMapper.selectMovieForCast(4L);
+		log.info(movieCasts);
+		for (MovieCast movieCast : movieCasts) {
+			Long mno = movieCast.getMno();
+			log.info(mno);	
+			String movieTitle = movieMapper.selectMovieTitle(mno);
+			log.info("Movie Title: " + movieTitle);
+			
+		}
+	}
+	
+	// 특정 영화의 배우 전체 조회
+	@Test
+	public void testSelectCastForMovieList() {
+		movieCastMapper.selectCastForMovie(3L).forEach(movieCast -> log.info(movieCast));
+	}
+	
+}

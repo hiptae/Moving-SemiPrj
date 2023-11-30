@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MovieGenreMapper">
+<resultMap type="kr.co.mpago.domain.MovieGenre" id="movieGenreResultMap">
+	<result property="mno" column="mno"/>
+	<result property="gno" column="gno"/>
+</resultMap>
+<insert id="insertMovieGenreMapping">
+	insert into tbl_moviegenre(mno, gno)
+	values (#{mno}, #{gno})
+</insert>
+<delete id="deleteMovieGenreMapping">
+	delete from tbl_moviegenre where mgno = #{mgno}
+</delete>
+<update id="updateMovieGenreMapping">
+	update tbl_moviegenre set mgno = #{mgno}, mno = #{mno}, gno = #{gno}
+</update>
+<select id="selectGenreForMovie" resultMap="movieGenreResultMap">
+	select title from tbl_movie
+	join tbl_moviegenre using (mno)
+	join tbl_genre using (gno)
+	where genre = '#{genre}'
+</select>
+<select id="selectMovieForGenre" resultMap="movieGenreResultMap">
+	select title from tbl_genre
+	join tbl_moviegenre using (gno)
+	join tbl_movie using (mno)
+	where title = '#{title}'
+</select>
+</mapper>

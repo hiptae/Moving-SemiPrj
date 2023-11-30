@@ -1,0 +1,13 @@
+package kr.co.mpago.domain;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class MovieImage {
+	private String backdroppath; // 이미지 주소 (~~~~~~~~~~~~~~~.jpg)
+	private String imagecate;	// 이미지 카테고리 (backdrop, logo, poster, profile, still-스틸컷)
+	private Long mno;	// 영화번호
+	
+}

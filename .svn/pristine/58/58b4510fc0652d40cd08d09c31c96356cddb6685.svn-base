@@ -1,0 +1,15 @@
+package kr.co.mpago.service;
+
+import java.util.List;
+
+import kr.co.mpago.domain.Cast;
+import kr.co.mpago.mapper.CastMapper;
+import kr.co.mpago.util.DBUtils;
+
+public class CastService {
+	private CastMapper castmapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(CastMapper.class);
+	
+	public List<Cast> getSearch(String search) {
+		return castmapper.searchCast(search);
+	}
+}

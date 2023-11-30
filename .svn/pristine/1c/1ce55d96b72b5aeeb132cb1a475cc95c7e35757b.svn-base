@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.RateMapper">
+<!-- 평점(점수, 댓글) 등록 -->
+<insert id="insert">
+	insert into tbl_rate(rate, userno, mno, tcomment) 
+	values(#{rate}, #{userno}, #{mno}, #{tcomment})
+</insert>
+
+<!-- 영화별 평점 조회 -->
+<select id="getMovie" resultType="kr.co.mpago.domain.Rate">
+	SELECT * from tbl_rate WHERE mno = #{mno}
+</select>
+
+<!-- userno의 평점 조회 -->
+<select id="getUser" resultType="kr.co.mpago.domain.Rate">
+	select * from tbl_rate where userno = #{userno}
+</select>
+
+<!-- 목록조회(전체 리뷰 조회) -->
+<select id="getList" resultType="kr.co.mpago.domain.Rate">
+	select * from tbl_rate order by 1 desc
+</select> 
+
+<!-- 평점 수정  -->
+<update id="modify">
+    UPDATE tbl_rate
+    SET rate = #{rate}, tcomment = #{tcomment}
+    WHERE userno = #{userno} AND mno = #{mno}
+</update>
+
+
+<!-- 평점 삭제 -->
+<delete id="delete">
+	 delete from tbl_rate where tno = #{tno} 
+</delete>
+<!-- update -->
+</mapper>

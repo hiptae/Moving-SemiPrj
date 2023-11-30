@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MovieMapper">
+<insert id="insertMovie">
+	insert into tbl_movie(title, rate, runningTime, mdate, rated, language, outline, status)
+	values (#{title}, #{rate}, #{runningTime}, #{mdate}, #{rated}, #{language}, #{outline}, #{status})
+</insert>
+<select id="selectMovie" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie where mno = #{mno}
+</select>	
+<delete id="deleteMovie" >
+	delete from tbl_movie where mno = #{mno}	
+</delete>
+<update id="updateMovie">
+	update tbl_movie set title = #{title}, rate = #{rate}, runningTime = #{runningTime}, mdate = #{mdate}, rated = #{rated}, language = #{language}, outline = #{outline}, status = #{status}
+	where mno = #{mno}
+</update>
+<select id="selectMovieList" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie order by mdate desc
+</select>
+<select id="selectMovieListByLanguage" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie where language = #{language} order by mdate desc
+</select>
+
+<select id="selectMovieTotal" resultType="int">
+	select count(*) from tbl_movie
+</select>
+</mapper>

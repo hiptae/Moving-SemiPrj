@@ -1,0 +1,16 @@
+package kr.co.mpago.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Insert;
+
+import kr.co.mpago.domain.Board;
+import kr.co.mpago.domain.Member;
+
+public interface MemberMapper {
+	int insert(Member member);
+	List<Member> getList();
+	Member read(String userid);
+	int delete(String userid);
+	int update(Member member);
+}

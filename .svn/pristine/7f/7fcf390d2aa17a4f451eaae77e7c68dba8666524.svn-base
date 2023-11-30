@@ -1,0 +1,11 @@
+package mapper;
+
+import domain.Member;
+
+public interface MemberMapper {
+	void insert(Member member);
+	void read();
+	int delete();
+	int update();
+	
+}

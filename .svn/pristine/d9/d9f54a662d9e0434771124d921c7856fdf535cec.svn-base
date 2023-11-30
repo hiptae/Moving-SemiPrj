@@ -1,0 +1,18 @@
+package kr.co.mpago.mapper;
+
+import java.util.List;
+
+import kr.co.mpago.domain.Genre;
+import kr.co.mpago.domain.Movie;
+import kr.co.mpago.domain.MovieGenre;
+
+public interface MovieGenreMapper {
+	
+	// 테스트 예정
+	void insertMovieGenreMapping(MovieGenre movieGenre); // 영화장르 Mapping 추가
+	int deleteMovieGenreMapping(Long mgno); // 영화장르 Mapping 삭제
+	int updateMovieGenreMapping(MovieGenre movieGenre); // 영화장르 Mapping 갱신
+	List<Genre> selectGenreForMovie(Long mno); // 특정 영화의 장르 조회
+	List<Movie> selectMovieForGenre(Long gno); // 특정 장르의 영화 조회
+	
+}

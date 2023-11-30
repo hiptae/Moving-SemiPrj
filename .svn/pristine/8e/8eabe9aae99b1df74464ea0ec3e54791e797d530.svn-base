@@ -1,0 +1,51 @@
+package kr.co.mpago.controller.movie;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Movie;
+import kr.co.mpago.service.MovieCastService;
+import kr.co.mpago.service.MovieService;
+import kr.co.mpago.util.WebUtils;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@WebServlet("/movie/cast")
+public class CastController extends HttpServlet {
+	private MovieCastService movieCastService = MovieCastService.getMovieCastService();
+	private MovieService movieService = MovieService.getMovieService();
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Long mno = Long.valueOf(req.getParameter("m"));
+		
+		// 영화
+		Movie movie = movieService.getMovie(mno);
+		if(movie == null || req.getParameter("m") == null) {	
+			WebUtils.alert(resp, "올바르지 못한 접근입니다." ,"/movie/list");
+			return;
+		}
+		
+		// 배우
+		Map<String, List<Map<String, Object>>> groupedCasts = new HashMap<>();
+		List<String> casttypes = movieCastService.getCasttypes();
+		log.info(casttypes);
+		for (String casttype : casttypes) {
+			List<Map<String, Object>> castList = movieCastService.getMovieCastListByType(mno, casttype);
+			groupedCasts.put(casttype, castList);
+		}
+		
+		req.setAttribute("groupedCasts", groupedCasts);
+		req.getRequestDispatcher("/WEB-INF/views/movie/movieCasts.jsp").forward(req, resp);
+		
+	}
+	
+}

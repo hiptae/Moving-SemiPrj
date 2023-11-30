@@ -1,0 +1,73 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="globals.css" />
+    <link rel="stylesheet" href="styleguide.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <div class="login">
+      <div class="div">
+        <div class="group">
+          <div class="overlap-group">
+            <p class="element-APCOM-all-ri">© 2022 Dramatic. All Rights Reserved.</p>
+            <div class="text-wrapper">이용약관</div>
+            <div class="text-wrapper-2">문의하기</div>
+            <div class="text-wrapper-3">공지사항</div>
+            <div class="text-wrapper-4">공지사항</div>
+            <img class="line" src="img/line-5.svg" />
+          </div>
+        </div>
+        <div class="overlap">
+          <img class="img" src="img/line-4.svg" />
+          <div class="frame">
+            <div class="overlap-2">
+              <div class="frame-wrapper"><div class="div-2"></div></div>
+              <div class="frame-2">
+                <div class="upper-section">
+                  <input class="login-text text-wrapper-5">아이디를 입력하세요
+                  <div class="credentials">
+                    <div class="username"><div class="text-wrapper-6">ID</div></div>
+                    <div class="password-rem">
+                      <div class="password">
+                        <div class="text-wrapper-6">PW</div>
+                        <div class="fluent-checkbox"></div>
+                      </div>
+                      <div class="remember">
+                        <img class="fluent-checkbox" src="img/fluent-checkbox-checked-16-filled.svg" />
+                        <div class="text-wrapper-7">Remember me</div>
+                      </div>
+                    </div>
+                    <div class="login-bt-fp">
+                      <div class="div-wrapper"><div class="text-wrapper-8">Login</div></div>
+                      <div class="text-wrapper-9">Forgot password ?</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="other-logins"><div class="div-2"></div></div>
+              </div>
+            </div>
+            <div class="text-wrapper-10">Login</div>
+          </div>
+        </div>
+        <div class="navbar">
+          <div class="top">
+            <div class="text-wrapper-11">Moving</div>
+            <img class="search" src="img/search.svg" />
+          </div>
+          <img class="rectangle" src="img/rectangle-4.svg" />
+          <div class="ellipse"></div>
+          <div class="text-wrapper-12">한국영화</div>
+          <div class="text-wrapper-13">외국영화</div>
+          <div class="text-wrapper-14">게시판</div>
+          <div class="text-wrapper-15">home</div>
+          <img class="vector" src="img/vector-25.svg" />
+        </div>
+        <div class="text-wrapper-16">Login</div>
+        <div class="ellipse-2"></div>
+      </div>
+    </div>
+  </body>
+</html>

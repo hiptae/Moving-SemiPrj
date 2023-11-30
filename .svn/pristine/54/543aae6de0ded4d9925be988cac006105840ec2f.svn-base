@@ -1,0 +1,23 @@
+package kr.co.mpago.mapper;
+
+import java.util.List;
+
+import kr.co.mpago.domain.FavoriteList;
+
+public interface FavoriteListMapper {
+	
+	// 등록
+	int insert(FavoriteList favoriteList);
+	
+	// 단일 조회
+	FavoriteList get(Long fno);
+	
+	// 목록 조회
+	List<FavoriteList> getFavoriteLists();
+	
+	// 수정
+	boolean modify(FavoriteList favoriteList);
+	
+	// 삭제
+	boolean delete(Long fno);
+}

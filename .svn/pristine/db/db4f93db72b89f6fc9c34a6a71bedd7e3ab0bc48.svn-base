@@ -1,0 +1,30 @@
+package kr.co.mpago.controller.member;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Member;
+
+@WebServlet("/myPage")
+public class MyPageController extends HttpServlet{
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Member member = (Member)req.getSession().getAttribute("member");		
+		if(member == null)     { // 비로그인시 메인으로 이동
+            resp.sendRedirect("/");
+            return;
+        }
+		req.getRequestDispatcher("WEB-INF/views/member/myPage.jsp").forward(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	}
+	
+}

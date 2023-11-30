@@ -1,0 +1,118 @@
+package kr.co.mpago.service;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import kr.co.mpago.domain.Movie;
+import kr.co.mpago.mapper.MovieMapper;
+
+import kr.co.mpago.util.DBUtils;
+import lombok.extern.log4j.Log4j;
+
+//@Log4j
+public class MovieService {
+	private MovieMapper movieMapper = DBUtils.sqlSessionFactory().openSession().getMapper(MovieMapper.class);
+	
+	/**
+	 * ApiUrl값(실제 https:// 주소값)
+	 * @param mno
+	 * @param apiKey
+	 * @return
+	 */
+	public String getApiUrl(Long mno, String apiKey) {
+		return "https://api.themoviedb.org/3/movie/" + mno + "?language=ko-kr&api_key=" + apiKey;
+	}
+	
+	/**
+	 * JSON 데이터를 가져옴
+	 * 
+	 * @param apiUrl
+	 * 
+	 * 
+	 * @return jsonMovieData
+	 * @throws IOException
+	 */
+	public String fetchJsonData(String apiUrl) throws IOException {
+		URL url = new URL(apiUrl);
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+
+        int responseCode = connection.getResponseCode();
+
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+//            log.info("fetchJsonData()_OK");
+            return response.toString();
+        } else {
+//        	log.info("fetchJsonData()_failed");
+            return null;
+        }
+	}
+
+	/**
+	 * JSON 데이터를 파싱하여 데이터베이스에 저장
+	 * 
+	 * @param mno
+	 * @param apiKey
+	 * @param jsonMovieData 
+	 * @throws IOException
+	 */
+	public void addMovieDataFromJson(Long mno, String apiKey, String apiUrl) throws IOException {
+		
+		String jsonMovieData = fetchJsonData(apiUrl); 
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		Movie movie = objectMapper.readValue(jsonMovieData, Movie.class);
+		
+		movieMapper.insertMovie(movie);
+	}
+	
+	/**
+	 * 영화 단일 조회 
+	 * @param mno
+	 * @return 
+	 */
+	public Movie findMovie(Long mno) {
+		return movieMapper.selectMovie(mno);
+	}
+	
+	/**
+	 * 영화 수정
+	 * @param movie
+	 * @return
+	 */
+	public boolean modifyMovie(Movie movie) {
+		return movieMapper.updateMovie(movie) > 0;
+	}
+	
+	/**
+	 * 영화 삭제
+	 * @param mno
+	 * @return
+	 */
+	public boolean removeMovie(Long mno) {
+		return movieMapper.deleteMovie(mno) > 0;
+	}
+	
+	/**
+	 * 영화 전체 갯수
+	 * @return
+	 */
+	public int findTotal() {
+		return movieMapper.selectMovieTotal();
+	}
+}

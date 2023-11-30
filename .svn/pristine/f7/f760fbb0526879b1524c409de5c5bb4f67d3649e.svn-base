@@ -1,0 +1,40 @@
+package kr.co.mpago.service;
+
+import java.util.List;
+
+import kr.co.mpago.domain.BoardReply;
+import kr.co.mpago.mapper.BoardReplyMapper;
+import kr.co.mpago.util.DBUtils;
+
+public class BoardReplyService {
+	private BoardReplyMapper ReplyMapper = DBUtils.sqlSessionFactory().openSession().getMapper(BoardReplyMapper.class); 
+	// 목록 조회
+	public List<BoardReply> getList() {
+		return ReplyMapper.getList();
+	}
+	
+	// 단일 조회
+	public BoardReply get(Long rno) {
+		return ReplyMapper.get(rno);
+	}
+	
+	// 댓글 총 갯수
+	public int getTotal() {
+		return ReplyMapper.getTotal();
+	}
+	
+	// 댓글 작성
+	public int insert(BoardReply reply) {
+		return ReplyMapper.insert(reply);
+	}
+	
+	// 댓글 수정
+	public boolean modify(BoardReply reply) {
+		return ReplyMapper.modify(reply);
+	}
+	
+	// 댓글 삭제
+	public boolean remove(Long rno) {
+		return ReplyMapper.remove(rno);
+	}
+}

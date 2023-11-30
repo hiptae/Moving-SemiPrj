@@ -1,0 +1,16 @@
+package kr.co.mpago.mapper;
+
+import java.util.List;
+
+import kr.co.mpago.domain.Movie;
+
+public interface MovieMapper {
+	void insert(Movie movie);
+	void insertSelectKey(Movie movie);
+	Movie select(Long mno); // 영화 선택(개별)
+	int delete(Long mno); // 영화 삭제
+	int update(Movie movie); // 영화 수
+	List<Movie> selectList(); // 영화 가져오기, 최신순
+	List<Movie> selectListByLanguage(String language); // 영화 가져오기, 언어별
+	int selectTotal();
+}

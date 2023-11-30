@@ -1,0 +1,20 @@
+package kr.co.mpago.domain;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Criteria {
+	private int pageNum = 1; // 페이지 번호
+	private int amount = 10; // 페이지당 보여지는 갯수
+	private String type = ""; // 게시글 카테고리
+	private String keyword; // 검색 키워드
+	
+	// 검색
+	public int getOffset() {
+		return (pageNum - 1) * amount;
+	}
+}

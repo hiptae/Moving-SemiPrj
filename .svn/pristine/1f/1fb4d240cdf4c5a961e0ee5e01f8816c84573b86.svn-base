@@ -1,0 +1,38 @@
+package kr.co.mpago.controller.board;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Board;
+import kr.co.mpago.domain.Member;
+import kr.co.mpago.service.BoardService;
+import kr.co.mpago.util.WebUtils;
+
+
+@WebServlet("/board/modify")
+public class Modify extends HttpServlet{
+	private BoardService boardService = new BoardService();
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Member member = WebUtils.getMember(req);
+		if(member != null) {
+			String bno = req.getParameter("bno");
+			if(bno != null) {
+				Board board = boardService.get(Long.valueOf(bno));
+					req.setAttribute("board", board);
+					req.getRequestDispatcher("/WEB-INF/views/board/modify.jsp").forward(req, resp);
+			}
+		}
+		WebUtils.alert(resp, "비정상적 접근입니다", req.getContextPath() + "/board/list");		
+	}
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		super.doPost(req, resp);
+	}
+}

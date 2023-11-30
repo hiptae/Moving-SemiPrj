@@ -1,0 +1,17 @@
+package kr.co.mpago.domain;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Cast {
+	private Long castno;	// 배우 번호
+	private String name;	// 배우 이름
+	private String profileImage;	// 배우 프로필사진 이미지
+	private String birthDate;	// 배우 생년월일정보
+}

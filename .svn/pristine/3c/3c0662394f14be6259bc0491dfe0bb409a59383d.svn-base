@@ -1,0 +1,36 @@
+package kr.co.mpago.mapper;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.junit.Test;
+
+import kr.co.mpago.domain.Favorite;
+import kr.co.mpago.util.DBUtils;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+public class FavoriteMapperTests {
+	private SqlSessionFactory factory = DBUtils.sqlSessionFactory();
+	private BoardMapper mapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(BoardMapper.class);
+
+	// Mapper 연결 Test (성공)
+	@Test
+	public void testMapper() {
+		System.out.println(mapper);
+		log.info(mapper);
+//		System.out.println(factory.getConfiguration());
+		log.info(factory.getConfiguration());
+	}
+
+	// 등록 Test (성공)
+	@Test
+	public void testInsert() {
+		Favorite favorite = Favorite.builder().userno(1L).mno(2L).build();
+		log.info(favorite);
+	}
+	
+	// 수정 Test 
+	@Test
+	public void testModify() {
+//		Favorite Favorite = Favorite.fno().build();
+	}
+}

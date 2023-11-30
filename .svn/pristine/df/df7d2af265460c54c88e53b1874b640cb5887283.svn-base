@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.CastMapper">
+	<insert id="insert">
+		insert into tbl_cast(name, casting, castType, ProfileImage, birthDate)
+		values (#{name}, #{casting}, #{castType}, #{ProfileImage}, #{birthDate})
+	</insert>
+	
+	<select id="select" resultType="kr.co.mpago.domain.Cast">
+		select * from tbl_cast where castno = #{castno}
+	</select>	
+	<delete id="delete" >
+		delete from tbl_cast where castno = #{castno}
+	</delete>
+	<update id="update">
+		update tbl_cast set name = #{name}, casting = #{casting}, castType = #{castType}, ProfileImage = #{ProfileImage}, birthDate = #{birthDate}
+			where castno = #{castno}
+	</update>
+	<select id="selectCastList" resultType="kr.co.mpago.domain.Cast">
+		select * from tbl_cast
+	</select>
+</mapper>

@@ -1,0 +1,15 @@
+package kr.co.mpago.mapper;
+
+import java.util.List;
+
+import kr.co.mpago.domain.MovieImage;
+
+public interface MovieImageMapper {
+	MovieImage selectMovieImage(String backdroppath); // 영화 
+	void insertMovieImage(MovieImage movieImage); // 영화 이미지 insert
+	int deleteMovieImage(String backdroppath);
+	int updateMovieImage(MovieImage movieImage);
+	List<MovieImage> selectMovieImageList(Long mno);
+	List<MovieImage> selectMovieImageListByImageCategory(Long mno, String imagecate);
+	int selectMovieImageTotal();
+}

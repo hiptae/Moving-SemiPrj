@@ -1,0 +1,63 @@
+package kr.co.mpago.controller.member;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Member;
+import kr.co.mpago.service.MemberService;
+import kr.co.mpago.util.WebUtils;
+//비밀번호변경
+
+@WebServlet("/member/profileModify")
+public class profileModifyController extends HttpServlet{
+	MemberService memberService = MemberService.getInstance();
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Object member = req.getSession().getAttribute("member");
+//		Member member = (Member)req.getSession().getAttribute("member");
+		if(member == null)     { // 비로그인시 메인으로 이동
+            resp.sendRedirect("/");
+            return;
+        }
+		req.setAttribute("myMember", memberService.findBy(((Member)member).getUserid()));
+		req.getRequestDispatcher("/WEB-INF/views/member/profileModify.jsp").forward(req, resp);
+	
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("utf-8");
+		resp.setContentType("text/html; charset=utf-8");
+		String oldpassword = req.getParameter("oldpassword");
+		String password = req.getParameter("password");
+		String passwordchk = req.getParameter("passwordchk");
+
+		Object member = req.getSession().getAttribute("member");
+		if(member == null) { // 비로그인
+			resp.sendRedirect("/");
+			return;
+		}
+	
+		// 유효성 검사
+		List<Member> findMember = memberService.findBy(((Member)member).getUserid()); // id로 회원정보 검색하고 findMember에 저장
+		if (!((Member) findMember).getPassword().equals(oldpassword)) {
+			WebUtils.alert(resp, "기존 비밀번호와 다릅니다.", true);
+		} else if(!password.equals(passwordchk)) {
+			WebUtils.alert(resp, "똑같이 입력해주세요", true);
+		}
+		
+		// 변경
+		memberService.modify(Member.builder().userid(((Member) findMember).getUserid()).password(password).build());
+
+		PrintWriter pw = resp.getWriter();
+		pw.write("<script>alert('비밀번호 변경 성공'); location.href = '/';</script>");
+	}
+}

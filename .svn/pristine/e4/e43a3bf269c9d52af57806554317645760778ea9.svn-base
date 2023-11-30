@@ -1,0 +1,50 @@
+package kr.co.mpago.controller.member;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+
+import kr.co.mpago.domain.Member;
+import kr.co.mpago.service.MemberService;
+
+
+@WebServlet("/member/profileModify")
+public class profileModifyController extends HttpServlet{
+	MemberService memberService = MemberService.getInstance();
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Member member = (Member)req.getSession().getAttribute("member");
+		
+		req.setAttribute("myMember", memberService.findBy(((Member)member).getUserid()));
+		req.getRequestDispatcher("/WEB-INF/views/member/profileModify.jsp").forward(req, resp);
+	}
+
+	
+	  @Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		    String userno = req.getParameter("userno");
+		    String nickname = req.getParameter("nickname");
+	  }
+
+
+	@Override
+	    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	        Member member = new Gson().fromJson(req.getReader(), Member.class);
+	        boolean result = memberService.modify(member);
+	        
+	        
+	        resp.setContentType("application/json");
+	        resp.setCharacterEncoding("UTF-8");
+	        resp.getWriter().write(new Gson().toJson(result));
+	    }
+}

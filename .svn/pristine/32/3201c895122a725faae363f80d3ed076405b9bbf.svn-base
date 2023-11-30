@@ -1,0 +1,59 @@
+package kr.co.mpago.service;
+
+import java.io.IOException;
+
+import org.apache.jasper.tagplugins.jstl.core.Url;
+import org.junit.Test;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import kr.co.mpago.domain.Movie;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+public class MovieServiceTests {
+	MovieService movieService = new MovieService();
+	
+	//테스트 성공
+	@Test
+	public void testGetApiUrl() {
+		Long mno = 807172L;
+		String apiKey = "60f92fc317ba11184216e66058a386e1";
+		String apiurl = movieService.getApiUrl(mno, apiKey);
+		log.info(apiurl);
+	}
+	
+	//테스트 성공
+	@Test
+	public void testFetchJsonData() throws IOException {
+		Long mno = 807172L;
+		String apiKey = "60f92fc317ba11184216e66058a386e1";
+		log.info(apiKey);
+		String apiUrl = movieService.getApiUrl(mno, apiKey);
+		log.info(apiUrl);
+		String jsonMovieData = movieService.fetchJsonData(apiUrl);
+		log.info(jsonMovieData);
+	}
+	
+	@Test
+	public void testAddMovieDataFromJson() throws IOException {
+		Long mno = 807172L;
+		String apiKey = "60f92fc317ba11184216e66058a386e1";
+		log.info(apiKey);
+		String apiUrl = movieService.getApiUrl(mno, apiKey);
+		log.info(apiUrl);
+		String jsonMovieData = movieService.fetchJsonData(apiUrl);
+		log.info(jsonMovieData);
+		movieService.addMovieDataFromJson(mno, apiKey, apiUrl);
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		log.info(objectMapper);
+		Movie movie = objectMapper.readValue(jsonMovieData, Movie.class);
+		log.info(movie);
+		
+		/*
+		 * {"adult":false,"backdrop_path":"/4DpVWbDmYanToTTkTp2SQLQX1p4.jpg", "belongs_to_collection":{"id":12263,"name":"엑소시스트 시리즈","poster_path":"/uPTu5kroKS6lHm6TKncIzVgwW2o.jpg","backdrop_path":"/tuORKw8hnP7Gd03BdBV6TmySR2G.jpg"},"budget":30000000,"genres":[{"id":27,"name":"공포"}],"homepage":"","id":807172,"imdb_id":"tt12921446","original_language":"en","original_title":"The Exorcist: Believer","overview":"한날한시에 동시에 사라졌던 앤젤라와 캐서린.  기억이 전부 사라진 채 상처투성이 몸으로 돌아온 두 아이는  이상증세를 보이며 날이 갈수록 섬뜩하게 변해간다. 마침내 두 아이의 몸을 동시에 차지한 악마가 존재를 드러내고, 한 명을 살리면 한 명이 죽는다는 충격적인 사실이 밝혀지는데…","popularity":985.16,"poster_path":"/gekQTgjZkPhpglvP1ZdTHBwi7xO.jpg","production_companies":[{"id":3172,"logo_path":"/kDedjRZwO8uyFhuHamomOhN6fzG.png","name":"Blumhouse Productions","origin_country":"US"},{"id":10210,"logo_path":"/gHaNnHd4LjNAoAG5aJthVrdAjZo.png","name":"Morgan Creek","origin_country":"US"},{"id":20848,"logo_path":"/htPfdm3yNRVsDz8CyyMozALKOO0.png","name":"Rough House Pictures","origin_country":"US"},{"id":33,"logo_path":"/8lvHyhjr8oUKOOy2dKXoALWKdp0.png","name":"Universal Pictures","origin_country":"US"}],"production_countries":[{"iso_3166_1":"US","name":"United States of America"}],"release_date":"2023-10-04","revenue":107561805,"runtime":111,"spoken_languages":[{"english_name":"English","iso_639_1":"en","name":"English"},{"english_name":"Portuguese","iso_639_1":"pt","name":"Português"}],"status":"Released","tagline":"신이 너한테 장난을 쳤네. 극한의 공포와 대면할 자, 누구인가","title":"엑소시스트: 믿는 자","video":false,"vote_average":5.746,"vote_count":189}
+		 */
+		
+	}
+}

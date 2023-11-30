@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MovieGenreMapper">
+	<insert id="insertMovieGenreMapping">
+		insert into tbl_moviegenre(mno, gno)
+		values (#{mno}, #{gno})
+	</insert>
+	<delete id="deleteMovieGenreMapping">
+		delete from tbl_moviegenre where mgno = #{mgno}
+	</delete>
+	<update id="updateMovieGenreMapping">
+		update tbl_moviegenre set mgno = #{mgno}, mno = #{mno}, gno = #{gno}
+	</update>
+	<select id="selectGenreListByMovie" resultType="map">
+		select * from tbl_genre
+		join tbl_moviegenre using (gno) where mno = #{mno}
+	</select>
+	<select id="selectListByMovie" resultType="kr.co.mpago.domain.MovieGenre">
+		select * from tbl_moviegenre where mno = #{mno}
+	</select>
+	<select id="selectMovieListByGenre" resultType="map">
+		select * from tbl_movie
+		join tbl_moviegenre using (mno) where gno = #{gno}
+	</select>
+	<select id="selectListByGenre" resultType="kr.co.mpago.domain.MovieGenre">
+		select * from tbl_moviegenre where gno = #{gno}
+	</select>
+	<select id="selecFirstTenByGenreList" resultType="kr.co.mpago.domain.MovieGenre">
+		select * from tbl_moviegenre where gno = #{gno} limit 10 
+	</select>
+</mapper>

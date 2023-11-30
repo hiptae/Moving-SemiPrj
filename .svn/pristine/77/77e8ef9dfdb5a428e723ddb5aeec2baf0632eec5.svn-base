@@ -1,0 +1,16 @@
+package kr.co.mpago.mapper;
+
+import org.apache.ibatis.annotations.Insert;
+
+import kr.co.mpago.domain.Board;
+import kr.co.mpago.domain.Member;
+
+public interface MemberMapper {
+	int insert(Member member);
+	Member read(String userid);
+	int delete();
+	int update();
+	@Insert("insert into tbl_board(title, content, writer) values(#{title}, #{content}, #{userid})")
+	int insert2(Board board);
+	
+}

@@ -1,0 +1,89 @@
+package kr.co.mpago.controller.movie;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Board;
+import kr.co.mpago.domain.Movie;
+import kr.co.mpago.domain.MovieImage;
+import kr.co.mpago.domain.Rate;
+import kr.co.mpago.service.MovieImageService;
+import kr.co.mpago.service.MovieService;
+import kr.co.mpago.service.RateService;
+import kr.co.mpago.util.WebUtils;
+import lombok.extern.log4j.Log4j;
+
+/**
+ * @WebServlet 
+ * 
+ * @author tj
+ *
+ */
+@Log4j
+@WebServlet({"/movie"})
+// 미완성
+public class MovieController extends HttpServlet {
+	private MovieService movieService = MovieService.getMovieService();
+	private MovieImageService movieImageService = MovieImageService.getMovieImageService();
+	private RateService rateService = RateService.getRateService(); 
+	
+	/**
+	 * 1. 영화 상세보기 page 
+	 * @return "/movie?m={mno}"
+	 * 
+	 * 2. 영화 언어별 보기 page (메인화면 헤더 카테고리에서 한국영화, 외국영화 클릭시)
+	 * @return "/movie/list?lang={language}"s
+	 * 
+	 * 3. 영화 카테고리별 보기 (메인화면 가로스크롤에서 더보기 누르면 나오는 화면)
+	 * @return "/movie/list?g={gno}"
+	 * 
+	 * "/movie" : 인기 영화 페이지로 또는 전체 영화 페이지로
+	 * "/movie/? : 구현예정 또는 구현필요X
+	 * 				(필수구현-예정) ko(한국영화), en(외국영화) 
+	 * 				(필수구현-예정) {mno}(영화번호, 상세조회)
+	 * 			 	(구현예정 또는 구현필요X) top-rated(평점순), now-playing(현재상영중), upcoming(개봉예정), 등
+	 */
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Long mno = Long.valueOf(req.getParameter("m"));
+		
+		Movie movie = movieService.getMovie(mno);
+		if(movie == null || req.getParameter("m") == null) {	
+			WebUtils.alert(resp, "올바르지 못한 접근입니다." ,"/movie/list");
+			return;
+		}
+		
+		// language가 en 이면 영어, ko 이면 한국어
+		movie.setLanguage(movie.getLanguage().equals("en") ? "영어" : (movie.getLanguage().equals("ko") ? "한국어" : movie.getLanguage()));
+
+		
+		MovieImage image = movieImageService.getMovieImageListByCategory(mno, "poster");
+		log.info(image);
+		if(image != null) {
+			String image2 = image.getBackdroppath();
+			image.setBackdroppath("https://image.tmdb.org/t/p/w300" + image2);
+			log.info(image);
+		} else {
+			image = new MovieImage();
+			log.info(image);
+			image.setMno(mno);
+			image.setImagecate("poster");
+			image.setBackdroppath("https://via.placeholder.com/300x450");
+		}
+		
+		Double rate = rateService.getRateAvg(mno); 
+		
+		req.setAttribute("image", image);
+		req.setAttribute("movie", movie);
+		req.setAttribute("rate", rate);
+		req.getRequestDispatcher("/WEB-INF/views/movie/movieDetails.jsp").forward(req, resp);
+	}
+
+
+}

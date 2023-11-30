@@ -1,0 +1,32 @@
+package kr.co.mpago.service;
+
+import java.util.List;
+
+import kr.co.mpago.domain.Favorite;
+import kr.co.mpago.mapper.FavoriteMapper;
+import kr.co.mpago.util.DBUtils;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE) // 기본생성자
+public class FavoriteService {
+	@Getter 
+	private static FavoriteService favoriteService = new FavoriteService(); // 생성자
+	private FavoriteMapper favoritemapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(FavoriteMapper.class);
+	
+	public void register(Favorite favorite) {
+		favoritemapper.insert(favorite);
+	}
+	
+	public List<Favorite> getList(Long userno) { // 찜 전체 목록
+		return favoritemapper.getList(userno);
+	}
+	
+	
+	
+	
+	
+}

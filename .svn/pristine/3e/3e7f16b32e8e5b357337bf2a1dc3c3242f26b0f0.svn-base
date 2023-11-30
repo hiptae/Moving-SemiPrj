@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MovieMapper">
+<insert id="insertMovie">
+	insert into tbl_movie(mno, title, runningTime, mdate, rated, language, outline, status)
+	values (#{mno}, #{title}, #{runningTime}, #{mdate}, #{rated}, #{language}, #{outline}, #{status})
+</insert>
+<select id="selectMovie" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie where mno = #{mno}
+</select>	
+<delete id="deleteMovie" >
+	delete from tbl_movie where mno = #{mno}	
+</delete>
+<update id="updateMovie">
+	update tbl_movie set mno = #{mno}, title = #{title}, runningTime = #{runningTime}, mdate = #{mdate}, rated = #{rated}, language = #{language}, outline = #{outline}, status = #{status}
+	where mno = #{mno}
+</update>
+<select id="selectMovieList" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie order by mdate desc
+</select>
+<select id="selectMovieListByLanguage" resultType="kr.co.mpago.domain.Movie">
+	select * from tbl_movie where language = #{language} order by mdate desc
+</select>
+
+<select id="selectMovieTotal" resultType="int">
+	select count(*) from tbl_movie
+</select>
+<select id="selectMovieTitle" resultType="string">
+	select title from tbl_movie where mno = #{mno}
+</select>
+
+
+<!-- 헤더 검색(영화제목, 배우이름) -->
+<select id="searchMoviCas" resultType="kr.co.mpago.domain.Movie">
+select img, title
+from(
+	select i.backdropPath img, title
+	from tbl_movie m
+	join tbl_movieimage i
+	using(mno)
+	union
+	select profileImage, name from tbl_cast
+) a
+where title like concat('%', #{search},'%')
+</select>
+
+<!-- 헤더 검색(영화만) -->
+<select id="searchMovi" resultType="kr.co.mpago.domain.Movie">
+select backdropPath img, title
+from tbl_movie
+join tbl_movieimage
+using(mno)
+where  title like concat('%', #{search},'%')
+</select>
+</mapper>

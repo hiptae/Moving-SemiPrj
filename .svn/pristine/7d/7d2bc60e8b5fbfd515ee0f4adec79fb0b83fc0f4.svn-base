@@ -1,0 +1,125 @@
+package kr.co.mpago.controller.movie;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.mariadb.jdbc.plugin.authentication.standard.ed25519.math.ed25519.Ed25519LittleEndianEncoding;
+
+import kr.co.mpago.domain.Criteria;
+import kr.co.mpago.domain.Genre;
+import kr.co.mpago.domain.Movie;
+import kr.co.mpago.domain.MovieGenre;
+import kr.co.mpago.domain.MovieImage;
+import kr.co.mpago.domain.MovieVideo;
+import kr.co.mpago.domain.PageDTO;
+import kr.co.mpago.service.GenreService;
+import kr.co.mpago.service.MovieGenreService;
+import kr.co.mpago.service.MovieImageService;
+import kr.co.mpago.service.MovieService;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@WebServlet("/movie/list")
+public class MovieByLanguage extends HttpServlet {
+	private MovieService movieService = MovieService.getMovieService();
+	private GenreService genreService = GenreService.getGenreService();
+	private MovieGenreService movieGenreService = MovieGenreService.getMovieGenreService();
+	private MovieImageService movieImageService = MovieImageService.getMovieImageService();
+	
+	/**
+	 * @author gilho
+	 * 
+	 * @param 
+	 * 0. 기본 페이지 (장르별 페이지)
+	 * 
+	 * @param gno
+	 * 1. 장르별 페이지 > 장르별 영화 > 버튼 클릭으로 이동
+	 *  >> 페이징 쿼리 필요
+	 *  
+	 *  @param language
+	 * 2. 언어별 페이지 > 헤더에서 한국영화/외국영화  + 메인에서 한국영화/외국영화 더보기에서 사용
+	 *  >> 페이징은 딱히필요하지않음
+	 *  
+	 *  @param gno
+	 *  @param language
+	 * 3. 장르 + 언어별 페이지 > 한국영화/외국영화 페이지에서 장르별 더보기로 들어갔을 때 사용
+	 * 	>> 페이징 쿼리 필요
+	 */
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String pageNumParam = req.getParameter("pageNum");
+		Long gno = null;
+		String language = req.getParameter("lang");
+		Long mno = null;
+		
+		// 필요한 경우 숫자 예외처리
+		String gParameter = req.getParameter("g");
+		if (gParameter != null && !gParameter.isEmpty()) {
+		    gno = Long.valueOf(gParameter);
+		}
+
+		log.info(gno);
+		log.info(language);
+		//'language' 또는 'gno' 중 하나라도 있는 경우
+		if (gno != null || language != null) {
+			// 기본 페이지 번호는 1로 설정
+			log.info("gno is not null or language is not null");
+			int pageNum = 1;
+			if (pageNumParam != null && !pageNumParam.isEmpty()) {
+				try {
+					pageNum = Integer.parseInt(pageNumParam);
+				} catch (NumberFormatException e) {
+					log.error("잘못된 페이지 번호 형식입니다. 기본 페이지 번호를 1로 설정합니다.");
+				}
+			}
+			
+			// 페이지당 표시할 회원 수
+			int amount = 15;
+			
+			Criteria criteria = Criteria.builder()
+					.pageNum(pageNum)
+					.amount(amount)
+					.build();
+
+			int offset = criteria.getOffset();
+			List<MovieGenre> results = null;
+			PageDTO pageDTO = null;
+			
+			if (language != null && gno != null) {
+				log.info("gno is not null, language is not null");
+				results = movieGenreService.getMoviesByGenreAndLanguage(gno, language, offset, amount); // Assuming a new method in MovieService
+				int totalMovies = movieGenreService.getTotalByGenreAndLanguage(gno, language); // Method in MovieService to find total by genre and language
+				pageDTO = new PageDTO(criteria, totalMovies);
+				
+			}
+			
+			if (language != null && gno == null) {
+				log.info("language is not null");
+				results = movieGenreService.getFirstTenByGenreList(gno);
+			}
+			
+			
+			if (language == null && gno != null) {
+				
+				log.info("gno is not null");
+				results = movieGenreService.getMoviesByGenre(gno, offset, amount); // Assuming a new method in MovieService
+				log.info(gno);
+				int totalMovies = movieGenreService.getTotalByGenre(gno); // Method in MovieService to find total by genre and language
+				pageDTO = new PageDTO(criteria, totalMovies);
+				
+			}
+				  
+			// 검색 결과와 페이징 정보를 request에 저장
+			req.setAttribute("gno", gno);
+			req.setAttribute("language", language);
+			req.setAttribute("list", results);
+			req.setAttribute("pageDTO", pageDTO);
+		req.getRequestDispatcher("/WEB-INF/views/movie/movieByLanguage.jsp").forward(req, resp);
+	}}
+}

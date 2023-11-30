@@ -1,0 +1,21 @@
+package kr.co.mpago.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.co.mpago.domain.Cast;
+import kr.co.mpago.domain.Movie;
+import kr.co.mpago.domain.MovieCast;
+
+public interface MovieCastMapper {	
+	
+	// 테스트 완료 
+	void insertMovieCastMapping(MovieCast movieCast); // 영화배우 Mapping 추가
+	int deleteMovieCastMapping(Long mcno); // 영화배우 Mapping 삭제
+	int updateMovieCastMapping(MovieCast movieCast); // 영화배우 Mapping 갱신
+	List<Map<String, Object>> selectCastListByMovie(Long mno); // 특정 영화의 배우 조회
+	List<MovieCast> selectListByMovie(Long mno); // Mno번 영화의 <List> 조회 
+	List<Map<String, Object>> selectMovieListByCast(Long castno); // 특정 배우의 영화 조회
+	List<MovieCast> selectListByCast(Long castno); // Castno번 배우<List> 조회 
+	
+}

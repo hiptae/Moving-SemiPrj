@@ -1,0 +1,23 @@
+package kr.co.mpago.service;
+
+import java.util.List;
+
+import kr.co.mpago.domain.Msg;
+import kr.co.mpago.mapper.MsgMapper;
+import kr.co.mpago.util.DBUtils;
+
+public class MsgService {
+	private MsgMapper msgMapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(MsgMapper.class);
+	
+	public void insert(Msg msg) {
+		msgMapper.insert(msg);
+	}
+	
+	public Msg read(Long msgno) {
+		return msgMapper.read(msgno);
+	}
+	
+	public List<Msg> ReciMsg(String tonick) {
+		return msgMapper.getReciList(tonick);
+	}
+}

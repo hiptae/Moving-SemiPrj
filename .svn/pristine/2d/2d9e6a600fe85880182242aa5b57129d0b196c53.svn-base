@@ -1,0 +1,134 @@
+package kr.co.mpago.service;
+
+import java.io.IOException;
+import java.sql.SQLSyntaxErrorException;
+
+import org.junit.Test;
+
+import com.google.gson.Gson;
+
+import kr.co.mpago.domain.Movie;
+import kr.co.mpago.mapper.MovieMapper;
+import kr.co.mpago.util.DBUtils;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+public class MovieServiceTests {
+	MovieService movieService = MovieService.getMovieService();
+	private MovieMapper movieMapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(MovieMapper.class);	
+	//테스트 성공
+	@Test
+	public void testGetApiUrl() {
+		Long mno = 807172L;
+		String apiKey = "60f92fc317ba11184216e66058a386e1";
+		String apiurl = movieService.getApiUrl(mno, apiKey);
+		log.info(apiurl);
+	}
+	
+	//테스트 성공
+	@Test
+	public void testFetchJsonData() throws IOException {
+		Long mno = 807172L;
+		String apiKey = "60f92fc317ba11184216e66058a386e1";
+		log.info(apiKey);
+		String apiUrl = movieService.getApiUrl(mno, apiKey);
+		log.info(apiUrl);
+		String jsonMovieData = movieService.fetchJsonData(apiUrl);
+		log.info(jsonMovieData);
+	}
+	
+	// 영화 여러개 넣기
+	// 3000번까지 들어감. (성공)
+	@Test
+	public void testAddMovieDatasFromJson() throws IOException {
+		for (long mno = 3001l; mno <= 3000l; mno++) {
+//			Long mno = 808175l;
+			String apiKey = "60f92fc317ba11184216e66058a386e1";
+			log.info(apiKey);
+			String apiUrl = movieService.getApiUrl(mno, apiKey);
+			String jsonMovieData = movieService.fetchJsonData(apiUrl);
+			if(jsonMovieData != null) {
+				log.info(jsonMovieData);
+				
+				Gson gson = new Gson();
+				Movie movie = gson.fromJson(jsonMovieData, Movie.class);
+				log.info(movie);
+				// 영어이거나 한국어인 영화만 넣는다. + date 없는값은 안넣음.
+				if((movie.getLanguage().equals("en") || movie.getLanguage().equals("ko")) && !movie.getMdate().equals("")) {//|| !((String) movie.getMdate() == "")) {
+					try {
+						movieMapper.insertMovie(movie);			
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+				}
+				else {
+					log.info("returned");
+				}	
+			} else {
+				log.info("failed");
+			}
+		}
+	}
+	
+	// 단일 추가 (성공)
+	@Test
+	public void testAddMovieDataFromJson() throws IOException {
+			Long mno = 21l;
+			String apiKey = "60f92fc317ba11184216e66058a386e1";
+			log.info(apiKey);
+			String apiUrl = movieService.getApiUrl(mno, apiKey);
+			//-------------------------------------------------------------
+			String jsonMovieData = movieService.fetchJsonData(apiUrl);
+			if(jsonMovieData != null) {
+				log.info(jsonMovieData);
+				
+				Gson gson = new Gson();
+				Movie movie = gson.fromJson(jsonMovieData, Movie.class);
+				log.info(movie);
+				log.info(movie.getLanguage());
+				log.info(movie.getLanguage().equals("en"));
+				
+				if((movie.getLanguage().equals("en") || movie.getLanguage().equals("ko")) && !movie.getMdate().equals("")) {//|| !((String) movie.getMdate() == "")) {
+					movieMapper.insertMovie(movie);			
+					log.info("if in");
+				}
+				else {
+					log.info("returned");
+				}	
+			} else {
+				log.info("failed");
+			}
+			//---------------------------------------------------------------
+		}
+	
+	// 안들어감. 해결 必
+	@Test
+	public void testAddMoive3() throws IOException {
+		Long mno = 2998l;
+		String apiKey = "60f92fc317ba11184216e66058a386e1";
+		String apiUrl = movieService.getApiUrl(mno, apiKey);
+		log.info(apiUrl);
+		log.info(movieService.fetchJsonData(apiUrl));
+		movieService.addMovieDataFromJson(mno, apiKey, movieService.getApiUrl(mno, apiKey));
+		log.info(movieService.findMovie(2998l));
+		
+	}
+	
+	// 영화 단일조회test
+	@Test
+	public void testFindMovie() {
+		movieService.findMovie(2997l);
+	}
+	
+	// 영화 수정test
+	@Test
+	public void testModifyMovie() {
+		Movie movie = Movie.builder().mno(1l).build();
+		movieService.modifyMovie(movie);
+	}
+}

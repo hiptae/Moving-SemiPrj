@@ -1,0 +1,20 @@
+package kr.co.mpago.service;
+
+import kr.co.mpago.domain.Board;
+import kr.co.mpago.mapper.BoardMapper;
+import kr.co.mpago.util.DBUtils;
+
+public class BoardService {
+	private BoardMapper boardMapper = DBUtils.sqlSessionFactory().openSession().getMapper(BoardMapper.class);
+	
+	public void write(Board board) {
+		boardMapper.insert(board);
+	}
+	
+	public static void main(String[] args) {
+		BoardService boardService = new BoardService();
+		
+		boardService.write(Board.builder().bno(2L).bcate("notify").userid("test").title("하하").content("허허").build());
+		
+	}
+}

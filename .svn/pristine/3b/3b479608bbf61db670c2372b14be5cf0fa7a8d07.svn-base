@@ -1,0 +1,7 @@
+package kr.co.mpago.mapper;
+
+import kr.co.mpago.domain.Chat;
+
+public interface ChatMapper {
+	int insert(Chat chat);
+}

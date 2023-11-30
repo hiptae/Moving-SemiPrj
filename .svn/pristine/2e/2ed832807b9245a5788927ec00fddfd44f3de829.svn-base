@@ -1,0 +1,55 @@
+package kr.co.mpago.controller.movie;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Genre;
+import kr.co.mpago.domain.Movie;
+import kr.co.mpago.domain.MovieGenre;
+import kr.co.mpago.service.GenreService;
+import kr.co.mpago.service.MovieGenreService;
+import kr.co.mpago.service.MovieService;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@WebServlet("/movie/list")
+public class MovieByLanguage extends HttpServlet {
+	private MovieService movieService = MovieService.getMovieService();
+	private GenreService genreService = GenreService.getGenreService();
+	private MovieGenreService movieGenreService = MovieGenreService.getMovieGenreService();
+	
+	/**
+	 * @author gilho
+	 * 
+	 * @param --
+	 * 0. 기본 페이지 (장르별 페이지)
+	 * 
+	 * @param gno
+	 * 1. 장르별 페이지 > 장르별 영화 > 버튼 클릭으로 이동
+	 *  >> 페이징 쿼리 필요
+	 *  
+	 *  @param language
+	 * 2. 언어별 페이지 > 헤더에서 한국영화/외국영화  + 메인에서 한국영화/외국영화 더보기에서 사용
+	 *  >> 페이징은 딱히필요하지않음
+	 *  
+	 *  @param gno
+	 *  @param language
+	 * 3. 장르 + 언어별 페이지 > 한국영화/외국영화 페이지에서 장르별 더보기로 들어갔을 때 사용
+	 * 	>> 페이징 쿼리 필요
+	 */
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//		Long gno = Long.valueOf(req.getParameter("g"));
+//		String language = req.getParameter("lang");
+//		List<Movie> movies = movieService.getMovieListByLanguage(language);
+//		req.setAttribute("movies", movies);
+		
+		req.getRequestDispatcher("/WEB-INF/views/movie/movieByLanguage.jsp").forward(req, resp);
+	}
+}

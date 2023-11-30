@@ -1,0 +1,17 @@
+package kr.co.mpago.domain;
+
+import java.util.Date;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class Notice {
+	private Long bno;
+	private String nickname;
+	private String title;
+	private String content;
+	private Date regDate;
+	private boolean isAdmin; 
+}

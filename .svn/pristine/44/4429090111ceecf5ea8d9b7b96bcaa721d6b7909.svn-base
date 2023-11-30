@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.BoardCategoryMapper">
+<!-- 카테고리 목록 조회 -->
+<select id="getList">
+	select * from tbl_boardcategory order by 1 desc
+</select>
+<!-- 목록 단일 조회 -->
+<select id="get">
+	select * from tbl_boardcategory where bcate = #{bcate}
+</select>
+<!-- 카테고리 목록 추가 -->
+<insert id="insert">
+	insert into tbl_boardcategory(bcategory) values(#{bcategory})
+</insert>
+<!-- 카테고리 수정 -->
+<update id="modify">
+	update tbl_boardcategory set bcategory= #{bcategory} where bcate= #{bcate}
+</update>
+<!-- 카테고리 삭제 -->
+<delete id="delete">
+	delete from tbl_boardcategory where bcate= #{bcate}
+</delete>
+</mapper>

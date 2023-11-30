@@ -1,0 +1,42 @@
+package kr.co.mpago.controller.member;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Member;
+import kr.co.mpago.mapper.FavoriteMapper;
+import kr.co.mpago.service.FavoriteService;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@WebServlet("/member/favorite")
+public class FavoriteController extends HttpServlet{
+	FavoriteService favoriteService = FavoriteService.getFavoriteService();
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+		Member member = (Member) req.getSession().getAttribute("member"); //Member 정보를 가져와서 mem 변수에 저장
+//		log.info(member);
+		
+		if(member == null)     { // 비로그인시 메인으로 이동
+            resp.sendRedirect("/");
+            return;
+        }
+		req.setAttribute("favoriteList", favoriteService.getList(member.getUserno())); // 리스트
+		req.getRequestDispatcher("/WEB-INF/views/member/favorite.jsp").forward(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	    String fno = req.getParameter("fno");
+	    String userno = req.getParameter("userno");
+	    String mno = req.getParameter("mno");
+	    
+//	    super.doPost(req, resp);
+	}
+}

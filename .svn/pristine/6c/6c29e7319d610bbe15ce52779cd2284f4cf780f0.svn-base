@@ -1,0 +1,17 @@
+package kr.co.mpago.controller.board;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Criteria;
+import kr.co.mpago.service.BoardService;
+
+@WebServlet("/board/register")
+public class register extends HttpServlet{
+	private BoardService boardService = new BoardService();
+}

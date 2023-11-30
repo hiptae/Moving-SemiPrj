@@ -1,0 +1,18 @@
+package kr.co.mpago.util;
+
+import java.util.Random;
+
+public class RandomCode {
+	private StringBuilder code = new StringBuilder();
+	public String create() {
+		Random random = new Random();
+		String alp = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		for (int i = 0; i < 3; i++) {
+			char c = alp.charAt(random.nextInt(alp.length()));
+			long a = Math.round(Math.random() * 10);
+			code.append(a);
+			code.append(c);
+		}
+		return code.toString();
+	}
+}

@@ -1,0 +1,44 @@
+package kr.co.mpago.service;
+
+import org.junit.Test;
+
+import kr.co.mpago.domain.Genre;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+public class GenreServiceTests {
+	GenreService genreService = GenreService.getGenreService();
+
+	@Test
+	public void testGetGenreList() {
+		genreService.getGenreList();
+	}
+	
+	@Test
+	public void testGetGenre() {
+		Long gno = 2l;
+		genreService.getGenre(gno);
+	}
+	
+	@Test
+	public void testAddGenre() {
+		Long gno = 2l;
+		Genre genre = genreService.getGenre(gno);
+		genreService.addGenre(genre);
+	}
+
+	@Test
+	public void testRemoveGenre() {
+		Long gno = 2l;
+		genreService.removeGenre(gno);
+	}
+	
+	@Test
+	public void testModifyGenre() {
+		Long gno = 2l;
+		Genre genre = genreService.getGenre(gno);
+		genre.setGenre("장르이름");
+		genreService.modifyGenre(genre);
+	}
+	
+}

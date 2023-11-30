@@ -1,0 +1,39 @@
+package kr.co.mpago.controller.movie;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Genre;
+import kr.co.mpago.domain.MovieGenre;
+import kr.co.mpago.service.GenreService;
+import kr.co.mpago.service.MovieGenreService;
+import kr.co.mpago.service.MovieService;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@WebServlet("/movie/list")
+public class MovieByLanguage extends HttpServlet {
+	private MovieService movieService = MovieService.getMovieService();
+	private GenreService genreService = GenreService.getGenreService();
+	private MovieGenreService movieGenreService = MovieGenreService.getMovieGenreService();
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//		Long gno = Long.valueOf(req.getParameter("g"));
+		// 영화 10개만 받아오기, 추후 수정예정
+//		List<MovieGenre> gl = movieGenreService.getFirstTenByGenreList(gno);
+//		log.info(gl);
+//		req.setAttribute("genreMovies", gl);
+		List<Genre> genres = genreService.getGenreList();
+//		List<MovieGenre> movies = movieGenreService.getFirstTenByGenreList(gno);
+		log.info(genres);
+		req.setAttribute("genres", genres);
+		req.getRequestDispatcher("/WEB-INF/views/movie/movieByLanguage.jsp").forward(req, resp);
+	}
+}

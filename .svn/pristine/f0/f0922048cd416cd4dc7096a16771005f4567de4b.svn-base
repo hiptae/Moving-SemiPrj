@@ -1,0 +1,64 @@
+package util;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class DBUtils {
+	public static Connection getConnection() {
+		Connection conn = null;
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mariadb://mpago.co.kr:3306/moving", "kht", "1234");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return conn;
+	}
+	public static int eu(String sql, Object...args) {
+		int ret = 0;
+		try {
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			for (int i = 1; i <= args.length; i++) {
+				setPstmtParameter(pstmt, i, args[i-1]);
+			}
+			ret = pstmt.executeUpdate();
+			pstmt.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	public static void setPstmtParameter(PreparedStatement pstmt, int idx, Object o) throws SQLException {
+		if(o == null) {
+			pstmt.setObject(idx, null);
+			return;
+		}
+		
+		switch (o.getClass().getSimpleName()) {
+		case "String":
+			pstmt.setString(idx, (String)o);
+			break;
+		case "int": case "Integer":
+			pstmt.setInt(idx, (Integer)o);
+			break;
+		case "long": case "Long":
+			pstmt.setLong(idx, (Long)o);
+			break;
+		case "double": case "Double":
+			pstmt.setDouble(idx, (Double)o);
+			break;
+		case "date":
+			pstmt.setDate(idx, (Date)o);
+			break;
+
+		default:
+			break;
+		}
+	}
+}

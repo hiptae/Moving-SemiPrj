@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.ChatMapper">
+	   <!-- 채팅 등록 -->
+    <insert id="insert" parameterType="kr.co.mpago.domain.Chat">
+        insert into tbl_chat (receiverno, sendno, content)
+        values (#{receiverno}, #{sendno}, #{content})
+    </insert>
+
+    <!-- 채팅 조회 -->
+    <select id="get" parameterType="long" resultType="kr.co.mpago.domain.Chat">
+        select * from tbl_chat where chatno = #{chatno}
+    </select>
+
+    <!-- 채팅 목록 조회 -->
+    <select id="getList" resultType="kr.co.mpago.domain.Chat">
+        select * from tbl_chat
+    </select>
+
+    <!-- 채팅 삭제 -->
+    <delete id="delete" parameterType="long">
+        delete from tbl_chat where chatno = #{chatno}
+    </delete>
+</mapper>

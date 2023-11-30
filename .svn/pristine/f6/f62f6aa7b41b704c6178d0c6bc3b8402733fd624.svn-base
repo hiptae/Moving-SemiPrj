@@ -1,0 +1,46 @@
+package kr.co.mpago.service;
+
+import java.util.List;
+
+import kr.co.mpago.domain.Rate;
+import kr.co.mpago.mapper.RateMapper;
+import kr.co.mpago.util.DBUtils;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class RateService {
+	@Getter
+	private static RateService rateService = new RateService();
+	private RateMapper rateMapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(RateMapper.class);
+
+	public void register(Rate rate) {
+		rateMapper.insert(rate);
+	}
+	
+	public List<Rate> getMovie(Long mno){
+		return rateMapper.getMovie(mno);
+	}
+	
+	public List<Rate> getUser(Long userno){
+		return rateMapper.getUser(userno);
+	}
+	
+	public List<Rate> getList(){
+		return rateMapper.getList();
+	}
+	
+	public Double getRateAvg(Long mno) {
+		return rateMapper.getRateAvg(mno);
+	}
+	
+	public boolean modify(Rate rate) {
+		return rateMapper.modify(rate);
+	}
+	  
+	public boolean delete(Long tno) {
+		return rateMapper.delete(tno);
+	}
+
+}

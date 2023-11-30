@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.MemberMapper">
+	<!-- 회원등록 -->
+	<insert id="insert">
+	insert into tbl_member(userid, nickname, username, password, email, gender) 
+	values(#{userid}, #{nickname}, #{username}, #{password}, #{email}, #{gender})
+	</insert>
+	
+	<!-- 단일조회 -->
+	<select id="read" resultType="kr.co.mpago.domain.Member">
+	select userno, userid, nickname, password, email, regdate, gender, number, isadmin from tbl_member where userid = #{userid}
+	</select>
+	<!-- 회원 번호(userno)에 따른 단일조회 -->
+	<select id="readByUserno" resultType="kr.co.mpago.domain.Member">
+	select userno, userid, nickname, username, email, number, regdate, isadmin from tbl_member where userno = #{userno}
+	</select>
+	
+	<!-- 목록조회 -->
+	<select id="getList" resultType="kr.co.mpago.domain.Member">
+	   select userno, userid, nickname, username, email, number, regdate from tbl_member order by regdate DESC
+	</select>
+	
+    <!-- 회원검색(이름) -->
+    <select id="findMember" resultType="kr.co.mpago.domain.Member">
+        select * from tbl_member where username like concat('%', #{username}, '%')
+    </select>
+	
+	<!-- 회원정보수정 -->
+	<update id="update">
+    update tbl_member
+    <set>
+        <if test="userid != null">userid = #{userid},</if>
+        <if test="nickname != null">nickname = #{nickname},</if>
+        <if test="username != null">username = #{username},</if>
+        <if test="password != null">password = #{password},</if>
+        <if test="email != null">email = #{email},</if>
+        <if test="regdate != null">regdate = #{regdate},</if>
+        <if test="profileImg != null">profileImg = #{profileImg},</if>
+        <if test="gender != null">gender = #{gender},</if>
+        <if test="number != null">number = #{number},</if>
+        <if test="isAdmin != null">isAdmin = #{isAdmin},</if>
+        <if test="isNotif != null">isNotif = #{isNotif}</if>
+    </set>
+    where userno = #{userno}
+</update>
+	
+	<!-- 회원정보삭제 -->
+	<delete id="delete">
+	delete from tbl_member where userno = #{userno}
+	</delete>
+	<!-- 회원목록삭제  -->
+	<delete id="deleteAll">
+    delete from tbl_member where userno in
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item}
+    </foreach>
+	</delete>
+	<!-- 아이디 중복검사 -->
+	<select id="findId" resultType="int">
+	select count(*) from tbl_member where userid = #{userid}
+	</select>
+	
+	<!-- 닉네임 중복검사 -->
+	<select id="findNick" resultType="int">
+	select count(*) from tbl_member where nickname = #{nickname}
+	</select>
+
+	<!-- 이메일 중복검사 -->
+	<select id="findEmail" resultType="int">
+	select count(*) from tbl_member where email = #{email}
+	</select>
+	<!-- 회원 전체 수 조회 -->
+	<select id="getTotal" resultType="int">
+    select count(*) from tbl_member
+	</select>
+	<!-- 목록 처리 -->
+	<select id="getListWithPaging" parameterType="kr.co.mpago.domain.Criteria" resultType="kr.co.mpago.domain.Member">
+    <![CDATA[
+    select userno, userid, nickname, username, email, number, regdate
+    FROM (
+        select *, row_number() over (order by regdate desc) as rnum
+        from tbl_member
+         where username LIKE CONCAT('%', #{keyword}, '%')
+    ) as tbl
+    where rnum between #{offset} + 1 and #{offset} + #{amount}
+    ]]>   
+	</select>
+	<!-- 검색어에 따른 회원 수 조회 -->
+	<select id="getTotalWithKeyword" resultType="int">
+    select count(*) from tbl_member where username LIKE CONCAT('%', #{keyword}, '%')
+	</select>
+	<!-- 비밀번호변경  -->
+	<update id="updatePwd">
+	UPDATE tbl_member
+	SET updatePwd = #{updatePwd}
+	WHERE userid = #{userid} AND password = #{password};
+	</update>
+</mapper>

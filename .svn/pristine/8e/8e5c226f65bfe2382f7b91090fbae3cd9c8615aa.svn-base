@@ -1,0 +1,12 @@
+package kr.co.mpago.domain;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class MovieVideo {
+	private String videoKey;	// 유튜브 주소, pk
+	private Long mno;	// 영화 번호
+	private String type;	// 예고편, 선공개 등 동영상 타입
+}

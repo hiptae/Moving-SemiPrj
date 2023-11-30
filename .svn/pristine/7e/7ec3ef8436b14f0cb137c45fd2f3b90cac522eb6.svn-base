@@ -1,0 +1,26 @@
+package kr.co.mpago.controller.admin;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Criteria;
+import kr.co.mpago.domain.PageDTO;
+import kr.co.mpago.service.MemberService;
+import kr.co.mpago.util.WebUtils;
+
+@WebServlet("/admin/memberList")
+public class MemberList extends HttpServlet {
+	private MemberService memberService = new MemberService();
+	
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Criteria criteria = WebUtils.memberCriteria(req);
+		req.setAttribute("pageDto", new PageDTO(criteria, 0));
+		req.setAttribute("list", memberService.getList());
+		req.getRequestDispatcher("/WEB-INF/views/admin/memberList.jsp").forward(req, resp); 
+	}
+}

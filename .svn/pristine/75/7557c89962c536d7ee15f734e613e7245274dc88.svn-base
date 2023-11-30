@@ -1,0 +1,17 @@
+package kr.co.mpago.domain;
+
+import java.util.Date;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class BoardReply {
+	private Long rno;
+	private Long bno;
+	private Long userno;
+	private	String nickname;
+	private Date regDate;
+	private String comment;
+}

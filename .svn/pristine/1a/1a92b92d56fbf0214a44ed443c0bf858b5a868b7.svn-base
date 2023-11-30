@@ -1,0 +1,29 @@
+package kr.co.mpago.service;
+
+import kr.co.mpago.domain.Movie;
+import kr.co.mpago.mapper.MovieMapper;
+import kr.co.mpago.util.DBUtils;
+
+public class MovieService {
+	private MovieMapper movieMapper = DBUtils.sqlSessionFactory().openSession().getMapper(MovieMapper.class);
+	
+	public void addMovie(Movie movie) {
+		movieMapper.insert(movie);
+	}
+	
+	public Movie findMovie(Long mno) {
+		return movieMapper.select(mno);
+	}
+	
+	public boolean modifyMovie(Movie movie) {
+		return movieMapper.update(movie) > 0;
+	}
+	
+	public boolean removeMovie(Long mno) {
+		return movieMapper.delete(mno) > 0;
+	}
+	
+	public int findTotal() {
+		return movieMapper.selectTotal();
+	}
+}

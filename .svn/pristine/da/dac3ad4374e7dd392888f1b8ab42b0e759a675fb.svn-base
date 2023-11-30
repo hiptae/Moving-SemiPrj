@@ -1,0 +1,14 @@
+package kr.co.mpago.domain;
+
+import java.util.Date;
+
+public class Msg {
+	private Long msgno;
+	private String title;
+	private String content;
+	private Date regdate;
+	
+	// fk 회원 닉네임
+	private String fromnick;
+	private String tonick;
+}

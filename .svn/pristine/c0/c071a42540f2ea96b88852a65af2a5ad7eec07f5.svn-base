@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mpago.mapper.FavoriteListMapper">
+<!-- 등록 -->
+<insert id="insert">
+	INSERT INTO tbl_favoriteList (userno, mno)
+	VALUES(#{userno}, #{mno})
+</insert>
+<!-- 단일 조회 -->
+<select id="get" resultType="kr.co.mpago.domain.FavoriteList">
+	select * from tbl_favoriteList where fno = #{fno}
+</select>
+<!-- 목록조회 -->
+<select id="getList" resultType="kr.co.mpago.domain.FavoriteList">
+	select * from tbl_favoriteList order by 1 desc
+</select>
+<!-- 수정 -->
+<update id="modify">
+	update tbl_favoriteList set fno = #{fno}
+</update>
+
+<!-- 삭제 -->
+<delete id="delete">
+		delete from tbl_favoriteList where fno = #{fno}
+	</delete>
+</mapper>

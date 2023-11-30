@@ -1,0 +1,14 @@
+package kr.co.mpago.domain;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class MovieCast {
+	private Long mcno;	// 장르 영화 Mapping Tbl 번호
+	private Long mno;	// 영화 번호
+	private Long castno;	// 배우 번호
+	private String casting;	// 배우 배역이름
+	private String castType;	// 타입 (주연, 조연, 감독)
+}

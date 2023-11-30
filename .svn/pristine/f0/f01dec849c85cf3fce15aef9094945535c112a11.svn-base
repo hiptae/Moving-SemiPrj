@@ -1,0 +1,57 @@
+package kr.co.mpago.mapper;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.junit.Test;
+
+import kr.co.mpago.domain.Board;
+import kr.co.mpago.domain.Member;
+import kr.co.mpago.util.DBUtils;
+import lombok.extern.log4j.Log4j;
+@Log4j
+public class MemberMapperTests {
+	private SqlSessionFactory factory = DBUtils.sqlSessionFactory();
+	private MemberMapper mapper = DBUtils.sqlSessionFactory().openSession(true).getMapper(MemberMapper.class);
+	
+	@Test
+	public void testMapper () {
+		log.info(mapper);
+		log.info(factory.getConfiguration());
+	}
+	
+	@Test
+	public void testInsert() {
+		Member member = Member.builder().userid("kimm").nickname("khaaa").password("1234").build();
+		log.info(member);
+		int count = mapper.insert(member);
+		log.info(count);
+	}
+	@Test
+	public void testRead() {
+		log.info(mapper.read("qwer"));
+	}
+	@Test
+	public void testGetList() {
+		mapper.getList();
+	}
+	@Test
+	public void testDelete() {
+		int cnt = mapper.delete("koka");
+		log.info(cnt);
+	}
+	@Test
+	public void testUpdate() {
+		Member mem = mapper.read("qwer");
+		log.info(mem);
+		mem.setNickname("김희태");
+		mem.setPassword("1234");
+		mapper.update(mem);
+		mem = mapper.read("qwer");
+		log.info(mem);
+	}
+	
+	@Test
+	public void testIdCheck() {
+		int cnt = mapper.findId("test");
+		log.info(cnt);
+	}
+}

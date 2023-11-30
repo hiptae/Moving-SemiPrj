@@ -1,0 +1,47 @@
+package kr.co.mpago.controller.member;
+
+import java.io.IOException;
+import java.net.URLDecoder;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Member;
+import kr.co.mpago.service.MemberService;
+
+
+
+
+@WebServlet("/member/signin")
+public class Signin extends HttpServlet{
+	private MemberService memberservice = new MemberService();
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.getRequestDispatcher("/WEB-INF/views/member/signin.jsp").forward(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("utf-8");
+		String id = req.getParameter("userid");
+		String pwd = req.getParameter("password");
+		String href = req.getParameter("href");
+		Member mem = memberservice.get(id);
+		System.out.println(href);
+		if(mem !=null && mem.getPassword().equals(pwd)) {
+			req.getSession().setAttribute("member", mem);
+			System.out.println("로그인 성공");
+			if(href != null) {
+				href = URLDecoder.decode(href, "utf-8");
+			}
+			resp.sendRedirect(href == null ? "/" : href);
+		}
+		else {
+			System.out.println("로그인 실패");
+		}
+	}
+
+}

@@ -1,0 +1,75 @@
+package kr.co.mpago.util;
+
+import java.sql.PreparedStatement;
+
+import org.apache.ibatis.datasource.pooled.PooledDataSource;
+import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+
+import kr.co.mpago.info.DBInfo;
+import kr.co.mpago.mapper.MemberMapper;
+
+public class DBUtils {
+    public static SqlSessionFactory getSqlSessionFactory() {
+        PooledDataSource dataSource = new PooledDataSource();
+        dataSource.setDriver("org.mariadb.jdbc.Driver");
+        dataSource.setUrl("jdbc:mariadb://mpago.co.kr:3306/moving");
+        dataSource.setUsername("kht");
+        dataSource.setPassword("1234");
+
+        Environment environment = new Environment("moving", new JdbcTransactionFactory(), dataSource);
+
+        Configuration configuration = new Configuration(environment);
+        configuration.addMapper(MemberMapper.class);  // Replace YourMapper with the actual mapper interface
+
+        return new SqlSessionFactoryBuilder().build(configuration);
+    }
+	    
+//    public static int eu(String sql, String... args) {
+//        int ret = 0;
+//        try {
+//            SqlSession sqlSession = MyBatisUtils.getSqlSessionFactory().openSession()) {
+//            DBMapper mapper = sqlSession.getMapper(DBMapper.class);
+//            ret = mapper.executeUpdate(sql, args);
+//            sqlSession.commit();
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return ret;
+//    }
+
+	
+//	public static void setPstmtParameter(PreparedStatement pstmt, int idx, Object o) throws SQLException {
+//		if(o == null) {
+//			pstmt.setObject(idx, null);
+//			return;
+//		}
+//		
+//		switch (o.getClass().getSimpleName()) {
+//		case "String":
+//			pstmt.setString(idx, (String)o);
+//			break;
+//		case "int": case "Integer":
+//			pstmt.setInt(idx, (Integer)o);
+//			break;
+//		case "long": case "Long":
+//			pstmt.setLong(idx, (Long)o);
+//			break;
+//		case "double": case "Double":
+//			pstmt.setDouble(idx, (Double)o);
+//			break;
+//		case "date":
+//			pstmt.setDate(idx, (Date)o);
+//			break;
+//
+//		default:
+//			break;
+//		}
+//	}
+}

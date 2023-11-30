@@ -1,0 +1,34 @@
+package kr.co.mpago.controller.msg;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.co.mpago.domain.Msg;
+import kr.co.mpago.service.MsgService;
+
+@WebServlet("/message/send")
+public class MessageSend extends HttpServlet{
+	private MsgService msgservice = new MsgService();
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.getRequestDispatcher("WEB-INF/views/message/msgConent.jsp").forward(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String title = req.getParameter("title");
+		String content = req.getParameter("content");
+		String fromnick	= req.getParameter("fromnick");
+		String tonick	= req.getParameter("tonick");
+	
+		Msg msg = Msg.builder().title(title).content(content).fromnick(fromnick).tonick(tonick).build();
+		msgservice.send(msg);
+	}
+
+}

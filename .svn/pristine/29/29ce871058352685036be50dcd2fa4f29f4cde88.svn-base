@@ -1,0 +1,253 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+<head>
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<title>Page Title</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="./css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin >
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>   
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
+<script src="https://unpkg.com/youtube-background@1.0.14/jquery.youtube-background.min.js"></script>
+
+
+<script>
+	function toggle(button) { // 찜(하트) 버튼 클릭시 채워진 하트로 변경
+ 		$.ajax("/favToggle?mno=${movie.mno}&userno=${member.userno}").done(function() {
+			heartIcon.classList.toggle("fas");
+			heartIcon.classList.toggle("far");
+ 		})
+	}
+</script>
+   <script>
+	    function getReplyLi(rate){
+			return `
+			<li data-rno='\${rate.tno}'>
+			<div class="clearfix">
+				<p class="reply-writer">\${rate.userno}</p><a href="" class="reply-menu-link">\${userno == member.userno ? '<i class="fas fa-ellipsis-v"></i>' : ''}</a>
+			</div>
+			<p class="reply-content">\${rate.tcomment}</p>
+		/* 	<p class="reply-regdate">\${moment(reply.regDate).fromNow()}</p> */
+			</li>
+		`;
+		}
+	    
+	    </script>
+
+</head>
+
+<!-- body -->
+<body>
+	<!-- header -->
+	<jsp:include page="../includes/header.jsp"></jsp:include>
+<main>
+	<!-- details -->
+    <div class="container-fluid bg-dark bg-gradient p-3 md-3 text-white">
+        <div class="container">
+            <section class=" row align-items-center">
+                <div class="col-xl-4 col-sm-6 text-center" >
+                    <img class="img-thumbnail" alt="${movie.title}의 이미지" src="${image.backdroppath}" >
+                </div>
+                <div class="col-xl-8 col-sm-6 my-5">
+                    <h2 class="my-5">
+                        <p>${movie.title}</p>
+                    </h2>
+                    <div class="my-3">
+                        <span class="border border-light p-1 mx-1">${movie.formattedMdate}</span>
+                        <c:set var="hours" value="${fn:substringBefore(String.valueOf(movie.runningTime / 60), '.')}" />
+						<c:set var="minutes" value="${movie.runningTime % 60}" />
+						<c:choose>
+						    <c:when test="${hours gt 0}">
+						        <span class="border border-light p-1 mx-1">${hours}h ${minutes}m</span>
+						    </c:when>
+						    <c:otherwise>
+						        <span class="border border-light p-1 mx-1">${minutes}m</span>
+						    </c:otherwise>
+						</c:choose>
+						<button class="btn" id="likeButton" onclick="toggle(this)"><i class="${empty favorite ? 'far' : 'fas'} fa-heart" id="heartIcon"></i></button> 
+						<!-- favorite가 null이면 far(빈하트), 그렇지 않으면 fas(하트)  -->	
+                    </div>
+                    <div class="my-3">
+                        <span class="p-1">평점</span>
+                        <span class="p-1">${rate}</span>
+                    </div>
+                    <h3 class="mt-5">개요</h3>
+                    <p class="fs-6 overflow-hidden">${movie.outline}</p>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="bg-light text-black">
+    	<!-- cast -->
+	    <div class="row pb-5">
+	   		<!-- cast -->
+	        <div class="col-lg-9 col-12">
+	        	<div class="mx-5">
+		            <div class="my-5">
+		                <h4>Cast</h4>
+		            </div>
+		            
+		            <!-- cast-inner -->
+		            <div>
+						<div class="divst-unstyled row adivgn-items-center">
+						    <div class="card shadow col-auto mx-3 mb-5 p-0 bg-light rounded border-secondary">
+					            <div class="card-header text-center img-fluid p-0">
+					                <img src="https://image.tmdb.org/t/p/w138_and_h175_face/rxQIrvUN1NGHkqSKHug1hoHTUNi.jpg">
+					            </div>
+					            <div class="card-body p-0">
+					            	<div class="text-black">
+					                <p class="px-2 text-truncate mt-5">Leonardo</p>
+					                <p class="px-2 text-truncate mt-6">Ernest Burkhart</p>
+					            	</div>
+					            </div>
+						    </div>
+						    <div class="card shadow col-auto mx-3 mb-5 p-0 bg-light rounded border-secondary">
+					            <div class="card-header text-center img-fluid p-0">
+					                <img src="https://image.tmdb.org/t/p/w138_and_h175_face/rxQIrvUN1NGHkqSKHug1hoHTUNi.jpg">
+					            </div>
+					            <div class="card-body p-0">
+					            	<div class="text-black">
+					                <p class="px-2 text-truncate mt-5">Leonardo</p>
+					                <p class="px-2 text-truncate mt-6">Ernest Burkhart</p>
+					            	</div>
+					            </div>
+						    </div>
+						    <div class="card shadow col-auto mx-3 mb-5 p-0 bg-light rounded border-secondary">
+					            <div class="card-header text-center img-fluid p-0">
+					                <img src="https://image.tmdb.org/t/p/w138_and_h175_face/rxQIrvUN1NGHkqSKHug1hoHTUNi.jpg">
+					            </div>
+					            <div class="card-body p-0">
+					            	<div class="text-black">
+					                <p class="px-2 text-truncate mt-5">Leonardo</p>
+					                <p class="px-2 text-truncate mt-6">Ernest Burkhart</p>
+					            	</div>
+					            </div>
+						    </div>
+						    <div class="card shadow col-auto mx-3 mb-5 p-0 bg-light rounded border-secondary">
+					            <div class="card-header text-center img-fluid p-0">
+					                <img src="https://image.tmdb.org/t/p/w138_and_h175_face/rxQIrvUN1NGHkqSKHug1hoHTUNi.jpg">
+					            </div>
+					            <div class="card-body p-0">
+					            	<div class="text-black">
+					                <p class="px-2 text-truncate mt-5">Leonardo</p>
+					                <p class="px-2 text-truncate mt-6">Ernest Burkhart</p>
+					            	</div>
+					            </div>
+						    </div>
+						    <div class="card shadow col-auto mx-3 mb-5 p-0 bg-light rounded border-secondary">
+					            <div class="card-header text-center img-fluid p-0">
+					                <img src="https://image.tmdb.org/t/p/w138_and_h175_face/rxQIrvUN1NGHkqSKHug1hoHTUNi.jpg">
+					            </div>
+					            <div class="card-body p-0">
+					            	<div class="text-black">
+					                <p class="px-2 text-truncate mt-5">Leonardo</p>
+					                <p class="px-2 text-truncate mt-6">Ernest Burkhart</p>
+					            	</div>
+					            </div>
+						    </div>
+						    <div class="card shadow col-auto mx-3 mb-5 p-0 bg-light rounded border-secondary">
+					            <div class="card-header text-center img-fluid p-0">
+					                <img src="https://image.tmdb.org/t/p/w138_and_h175_face/rxQIrvUN1NGHkqSKHug1hoHTUNi.jpg">
+					            </div>
+					            <div class="card-body p-0">
+					            	<div class="text-black">
+					                <p class="px-2 text-truncate mt-5">Leonardo</p>
+					                <p class="px-2 text-truncate mt-6">Ernest Burkhart</p>
+					            	</div>
+					            </div>
+						    </div>
+						    <div class="card shadow col-auto mx-3 mb-5 p-0 bg-light rounded border-secondary">
+					            <div class="card-header text-center img-fluid p-0">
+					                <img src="https://image.tmdb.org/t/p/w138_and_h175_face/rxQIrvUN1NGHkqSKHug1hoHTUNi.jpg">
+					            </div>
+					            <div class="card-body p-0">
+					            	<div class="text-black">
+					                <p class="px-2 text-truncate mt-5">Leonardo</p>
+					                <p class="px-2 text-truncate mt-6">Ernest Burkhart</p>
+					            	</div>
+					            </div>
+						    </div>
+						    <div class="card shadow col-auto mx-3 mb-5 p-0 bg-light rounded border-secondary">
+					            <div class="card-header text-center img-fluid p-0">
+					                <img src="https://image.tmdb.org/t/p/w138_and_h175_face/rxQIrvUN1NGHkqSKHug1hoHTUNi.jpg">
+					            </div>
+					            <div class="card-body p-0">
+					            	<div class="text-black">
+					                <p class="px-2 text-truncate mt-5">Leonardo</p>
+					                <p class="px-2 text-truncate mt-6">Ernest Burkhart</p>
+					            	</div>
+					            </div>
+						    </div>
+					    	<div>
+					    		<a class="float-end" href="#">더 보기 →</a>
+					    	</div>
+						</div>
+		            </div>
+	        	</div>
+	        </div>
+	        
+	        <!-- Details2  -->
+	        <div class="col-lg-3 py-5 px-5 border-start">
+	            <div>
+	                <p>원어</p>
+	                <p>${movie.language}</p>
+	            </div>
+	            <div>
+	                <p>상태</p>
+	                <p>${movie.status}</p>
+	            </div>
+	            <div>
+	                <p>카테고리</p>
+	                <ul>
+	                    <li>카테1</li>
+	                    <li>카테1</li>
+	                    <li>카테1</li>
+	                </ul>
+	            </div>
+	        </div>
+	    </div>
+	    <!-- Review -->
+	    <div class="mx-5 pb-5">
+	    	<ul class="replies"></ul>
+	    </div>
+	    
+	    
+	    
+	 
+	    
+	    
+	    
+	    
+	    
+	
+	    
+	   
+	   
+	   
+	   
+	   
+	   
+	    
+	    
+	    
+    </div>
+    <!-- Footer -->
+</main>
+    <jsp:include page="../includes/footer.jsp"></jsp:include>
+</body>
+</html>

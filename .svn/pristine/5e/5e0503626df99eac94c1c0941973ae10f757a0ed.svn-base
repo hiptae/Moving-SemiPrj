@@ -1,0 +1,99 @@
+package kr.co.mpago.controller.BoardReply;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+
+import kr.co.mpago.domain.BoardReply;
+import kr.co.mpago.domain.Criteria;
+import kr.co.mpago.service.BoardReplyService;
+
+@WebServlet("/reply/*")
+public class Reply extends HttpServlet {
+	private BoardReplyService replyService = new BoardReplyService();
+	private Gson gson = new Gson();
+	
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String uri = req.getRequestURI();
+		String[] arr = uri.substring(1).split("/");
+		
+		Long rno = Long.valueOf(arr[1]);
+		if(replyService.remove(rno) > 0) {
+			resp.setStatus(200);
+			resp.getWriter().print("success");
+		} else {
+			resp.setStatus(500);
+		}
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String uri = req.getRequestURI();
+		String[] arr = uri.substring(1).split("/");
+		Criteria criteria = new Criteria();
+		
+		Object o = null;
+		
+		if(arr.length == 2) { // 단일 조회
+			Long rno = Long.valueOf(arr[1]);
+			o = replyService.get(rno);
+		}else if(arr.length >= 3) { 
+			Long bno = Long.valueOf(arr[2]);
+			
+			if(arr[1].equals("list")) { // 목록 조회
+				
+				int amount = 5;
+				Long lastRno = Long.MAX_VALUE;
+				
+				if(arr.length > 3) {
+					lastRno = Long.valueOf(arr[3]);
+					System.out.println("목록 조회, bno : " + bno);
+					System.out.println("목록 조회, lastRno : " + lastRno);
+				}
+				
+				o = replyService.getList(criteria, bno);
+			}
+			else if(arr[1].equals("cnt")) {
+				
+				o = replyService.getCount(bno);
+			}
+		}
+		
+		resp.setContentType("application/json; charset=utf-8");
+		resp.getWriter().print(gson.toJson(o));
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String str = new BufferedReader(new InputStreamReader(req.getInputStream())).lines().collect(Collectors.joining());
+		BoardReply reply = gson.fromJson(str, BoardReply.class);
+		if(replyService.register(reply) > 0) {
+			resp.setStatus(200);
+			resp.getWriter().print(reply.getRno());
+		} else {
+			resp.setStatus(500);
+		}
+	}
+
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String str = new BufferedReader(new InputStreamReader(req.getInputStream())).lines().collect(Collectors.joining());
+		BoardReply reply = gson.fromJson(str, BoardReply.class);
+		if(replyService.modify(reply) > 0) {
+			resp.setStatus(200);
+			resp.getWriter().print("success");
+		} else {
+			resp.setStatus(500);
+		}
+	}
+}

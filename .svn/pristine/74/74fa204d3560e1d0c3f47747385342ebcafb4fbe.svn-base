@@ -1,0 +1,23 @@
+package kr.co.mpago.controller.main;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import lombok.extern.log4j.Log4j;
+
+
+
+
+@WebServlet("")
+@Log4j
+public class MainController extends HttpServlet {
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		log.info("main start.");
+		req.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(req, resp);
+	}
+}
