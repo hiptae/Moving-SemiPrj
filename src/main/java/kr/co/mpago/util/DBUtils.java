@@ -28,7 +28,7 @@ public class DBUtils {
     public static DataSource dataSource() {
     	HikariConfig config = new HikariConfig();
     	config.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
-    	config.setJdbcUrl("jdbc:log4jdbc:mariadb://mpago.co.kr:3306/moving");
+    	config.setJdbcUrl("jdbc:log4jdbc:mariadb://:3306/moving");
     	config.setUsername("kht");
     	config.setPassword("1234");
     	config.setMinimumIdle(1);
